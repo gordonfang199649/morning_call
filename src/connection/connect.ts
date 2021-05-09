@@ -1,8 +1,10 @@
+import * as dotenv from "dotenv";
+dotenv.config();
 import { connect, disconnect } from "mongoose";
 
 export const connection = async () => {
   try {
-    await connect("mongodb://localhost:27017/dailyInform", {
+    await connect(process.env.DB_SERVER, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
