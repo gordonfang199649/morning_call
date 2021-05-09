@@ -7,8 +7,9 @@ import AirQualityModel, { AirQuality, AirQualityDoc } from "../model/AirQualityM
  */
 export default class AirQualityDao {
   /**
-   * 
-   * @param airQualityPo 
+   * 監測數據儲存至資料庫
+   * @param airQualityPo 空氣品質實體
+   * @returns
    */
   public async saveMonitoringData(airQualityPo: AirQualityDoc): Promise<void> {
     try {
@@ -20,8 +21,9 @@ export default class AirQualityDao {
   }
 
   /**
-   * 
-   * @returns 
+   * 取得資料庫最新監測數據
+   * @param
+   * @returns AirQuality 空氣品質實體
    */
   public async fetechLatestData(): Promise<AirQuality> {
     let airQualityPo: AirQuality;
