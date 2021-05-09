@@ -1,6 +1,10 @@
-import { AirQuality } from "../model/AirQualityModel";
+import { MonitoringService } from "./MonitoringService";
 
-export interface AirQualityService {
-    saveEPAMonitoringData: any;
-    fetchMonitoringData(): Promise<AirQuality>;
+/**
+ * AirQualityService 空氣品質服務
+ * @author Gordon Fang
+ * @date 2021-05-10
+ */
+export interface AirQualityService extends MonitoringService {
+    
 }

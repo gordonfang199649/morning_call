@@ -8,6 +8,11 @@ import AirQualityModel, { AirQuality, AirQualityDoc } from "../model/AirQualityM
 import AirQualityDao from "../Repository/AirQualityDao";
 import { AirQualityService } from "./AirQualityService";
 
+/**
+ * AirQualityServiceImpl 空氣品質實作服務
+ * @author Gordon Fang
+ * @date 2021-05-10
+ */
 export default class AirQualityServiceImpl implements AirQualityService {
   private airQualityDao: AirQualityDao;
 
@@ -19,12 +24,7 @@ export default class AirQualityServiceImpl implements AirQualityService {
     this.airQualityDao = airQualityDao;
   }
 
-  /**
-   * 取得環保署Open API空氣數據、儲存到資料庫
-   * @param
-   * @returns
-   */
-  public async saveEPAMonitoringData(): Promise<void> {
+  public async saveMonitoringData(): Promise<void> {
     const airQualityData: any = await getAirQualityData(process.env.EPA_API_ID, 0, 1);
     if (airQualityData.hasOwnProperty("data")
       && airQualityData.data.length > 0) {
@@ -71,11 +71,6 @@ export default class AirQualityServiceImpl implements AirQualityService {
     }
   }
 
-  /**
-   * 取得目前最新的空氣監測數據
-   * @param
-   * @returns 空氣監測數據
-   */
   public async fetchMonitoringData(): Promise<AirQuality> {
     const airQualityPo: AirQuality = await this.airQualityDao.fetechLatestData();
     console.log('selected one row.')

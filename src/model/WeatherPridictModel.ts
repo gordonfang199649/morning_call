@@ -1,16 +1,19 @@
-import mongoose from "mongoose";
-const { Schema } = mongoose;
-export const COLLECTION_NAME = "WEATHER_PREDICT";
+import { model, Document, Schema } from "mongoose";
+const COLLECTION_NAME = "weatherPredict";
 
-const weatherPredictSchema = new Schema({
-  _id: {
-    types: Schema.Types.ObjectId,
-  },
-  datasetDescription: {
-    types: Schema.Types.String,
-    maxlength: 255,
-    trim: true,
-  },
+export interface WeatherPredict {
+  locationsName: string;
+  locationName: string;
+  description: string;
+  startTime: Date;
+  endTime: Date;
+  elementValue: string;
+  createDate: Date;
+}
+
+export interface WeatherPredictDoc extends Document, WeatherPredict { };
+
+const WeatherPredictSchema = new Schema({
   locationsName: {
     types: Schema.Types.String,
     required: true,
@@ -41,10 +44,9 @@ const weatherPredictSchema = new Schema({
     trim: true,
     maxlength: 255,
   },
-  CreateDate: {
+  createDate: {
     types: Schema.Types.Date,
-    default: Date.now(),
   },
 });
 
-export default mongoose.model(COLLECTION_NAME, weatherPredictSchema);
+export default model(COLLECTION_NAME, WeatherPredictSchema);

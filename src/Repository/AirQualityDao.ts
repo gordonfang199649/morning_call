@@ -2,6 +2,8 @@ import AirQualityModel, { AirQuality, AirQualityDoc } from "../model/AirQualityM
 
 /**
  * AirQualityDao
+ * @author Gordon Fang
+ * @date 2021-05-10
  */
 export default class AirQualityDao {
   /**
