@@ -1,7 +1,10 @@
+import dayjs from "dayjs";
 import { model, Document, Schema } from "mongoose";
-const COLLECTION_NAME = "airQualities";
+import Entity from "./Entity";
+const COLLECTION_NAME = "air_Qualities";
 
-export interface AirQuality {
+export interface AirQuality extends Entity {
+  type: string;
   siteId: number;
   county: string;
   siteName: string;
@@ -16,8 +19,13 @@ export interface AirQuality {
 export interface AirQualityDoc extends Document, AirQuality { };
 
 const AirQualitySchema: Schema = new Schema({
+  type: {
+    type: Schema.Types.String,
+    default: 'AirQuality'
+  },
   siteId: {
     type: Schema.Types.Number,
+    required: true,
   },
   county: {
     type: Schema.Types.String,
@@ -36,6 +44,7 @@ const AirQualitySchema: Schema = new Schema({
   },
   itemName: {
     type: Schema.Types.String,
+    required: true,
     maxlength: 5,
   },
   itemEngName: {
@@ -44,6 +53,7 @@ const AirQualitySchema: Schema = new Schema({
   },
   concentration: {
     type: Schema.Types.Number,
+    required: true,
   },
   suggestion: {
     type: Schema.Types.String,
@@ -51,6 +61,7 @@ const AirQualitySchema: Schema = new Schema({
   },
   createDate: {
     type: Schema.Types.Date,
+    default: dayjs().toDate()
   },
 });
 

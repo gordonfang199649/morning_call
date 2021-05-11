@@ -1,11 +1,20 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const dayjs_1 = __importDefault(require("dayjs"));
 const mongoose_1 = require("mongoose");
-const COLLECTION_NAME = "airQualities";
+const COLLECTION_NAME = "air_Qualities";
 ;
 const AirQualitySchema = new mongoose_1.Schema({
+    type: {
+        type: mongoose_1.Schema.Types.String,
+        default: 'AirQuality'
+    },
     siteId: {
         type: mongoose_1.Schema.Types.Number,
+        required: true,
     },
     county: {
         type: mongoose_1.Schema.Types.String,
@@ -24,6 +33,7 @@ const AirQualitySchema = new mongoose_1.Schema({
     },
     itemName: {
         type: mongoose_1.Schema.Types.String,
+        required: true,
         maxlength: 5,
     },
     itemEngName: {
@@ -32,6 +42,7 @@ const AirQualitySchema = new mongoose_1.Schema({
     },
     concentration: {
         type: mongoose_1.Schema.Types.Number,
+        required: true,
     },
     suggestion: {
         type: mongoose_1.Schema.Types.String,
@@ -39,6 +50,7 @@ const AirQualitySchema = new mongoose_1.Schema({
     },
     createDate: {
         type: mongoose_1.Schema.Types.Date,
+        default: dayjs_1.default().toDate()
     },
 });
 exports.default = mongoose_1.model(COLLECTION_NAME, AirQualitySchema);

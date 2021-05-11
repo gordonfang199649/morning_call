@@ -1,52 +1,44 @@
+import dayjs from "dayjs";
 import { model, Document, Schema } from "mongoose";
-const COLLECTION_NAME = "weatherPredict";
+import Entity from "./Entity";
+const COLLECTION_NAME = "weather_Predicts";
 
-export interface WeatherPredict {
+export interface WeatherPredict extends Entity {
+  type: string;
   locationsName: string;
-  locationName: string;
-  description: string;
-  startTime: Date;
-  endTime: Date;
+  startTime: string;
+  endTime: string;
   elementValue: string;
   createDate: Date;
 }
 
 export interface WeatherPredictDoc extends Document, WeatherPredict { };
 
-const WeatherPredictSchema = new Schema({
+const WeatherPredictSchema: Schema = new Schema({
+  type: {
+    type: Schema.Types.String,
+    default: 'WeatherPredict'
+  },
   locationsName: {
-    types: Schema.Types.String,
+    type: Schema.Types.String,
     required: true,
-    trim: true,
-    maxlength: 3,
-  },
-  locationName: {
-    types: Schema.Types.String,
-    required: true,
-    trim: true,
-    maxlength: 10,
-  },
-  description: {
-    types: Schema.Types.String,
-    trim: true,
-    maxlength: 255,
   },
   startTime: {
-    types: Schema.Types.Date,
+    type: Schema.Types.String,
     required: true,
   },
   endTime: {
-    types: Schema.Types.Date,
+    type: Schema.Types.String,
     required: true,
   },
   elementValue: {
-    types: Schema.Types.String,
-    trim: true,
-    maxlength: 255,
+    type: Schema.Types.String,
+    required: true,
   },
   createDate: {
-    types: Schema.Types.Date,
+    type: Schema.Types.Date,
+    default: dayjs().toDate()
   },
 });
 
-export default model(COLLECTION_NAME, WeatherPredictSchema);
+export default model<WeatherPredictDoc>(COLLECTION_NAME, WeatherPredictSchema);

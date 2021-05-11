@@ -3,53 +3,35 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.COLLECTION_NAME = void 0;
-const mongoose_1 = __importDefault(require("mongoose"));
-const { Schema } = mongoose_1.default;
-exports.COLLECTION_NAME = "WEATHER_PREDICT";
-const weatherPredictSchema = new Schema({
-    _id: {
-        types: Schema.Types.ObjectId,
-    },
-    datasetDescription: {
-        types: Schema.Types.String,
-        maxlength: 255,
-        trim: true,
+const dayjs_1 = __importDefault(require("dayjs"));
+const mongoose_1 = require("mongoose");
+const COLLECTION_NAME = "weather_Predicts";
+;
+const WeatherPredictSchema = new mongoose_1.Schema({
+    type: {
+        type: mongoose_1.Schema.Types.String,
+        default: 'WeatherPredict'
     },
     locationsName: {
-        types: Schema.Types.String,
+        type: mongoose_1.Schema.Types.String,
         required: true,
-        trim: true,
-        maxlength: 3,
-    },
-    locationName: {
-        types: Schema.Types.String,
-        required: true,
-        trim: true,
-        maxlength: 10,
-    },
-    description: {
-        types: Schema.Types.String,
-        trim: true,
-        maxlength: 255,
     },
     startTime: {
-        types: Schema.Types.Date,
+        type: mongoose_1.Schema.Types.String,
         required: true,
     },
     endTime: {
-        types: Schema.Types.Date,
+        type: mongoose_1.Schema.Types.String,
         required: true,
     },
     elementValue: {
-        types: Schema.Types.String,
-        trim: true,
-        maxlength: 255,
+        type: mongoose_1.Schema.Types.String,
+        required: true,
     },
-    CreateDate: {
-        types: Schema.Types.Date,
-        default: Date.now(),
+    createDate: {
+        type: mongoose_1.Schema.Types.Date,
+        default: dayjs_1.default().toDate()
     },
 });
-exports.default = mongoose_1.default.model(exports.COLLECTION_NAME, weatherPredictSchema);
+exports.default = mongoose_1.model(COLLECTION_NAME, WeatherPredictSchema);
 //# sourceMappingURL=WeatherPridictModel.js.map

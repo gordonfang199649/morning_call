@@ -1,12 +1,9 @@
 import * as dotenv from "dotenv";
 dotenv.config();
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
 import { getAirQualityData } from "../api/api";
 import AirQualityModel, { AirQuality, AirQualityDoc } from "../model/AirQualityModel";
 import AirQualityDao from "../Repository/AirQualityDao";
-import { AirQualityService } from "./AirQualityService";
+import AirQualityService from "./AirQualityService";
 
 /**
  * AirQualityServiceImpl 空氣品質實作服務
@@ -14,45 +11,28 @@ import { AirQualityService } from "./AirQualityService";
  * @date 2021-05-10
  */
 export default class AirQualityServiceImpl implements AirQualityService {
+  /** AirQualityDao 空氣品質實體持久層 */
   private airQualityDao: AirQualityDao;
 
   /**
    * 建構子
-   * @param airQualityDao AirQualityDao
+   * @param AirQualityDao 空氣品質實體持久層
    */
   constructor(airQualityDao: AirQualityDao) {
     this.airQualityDao = airQualityDao;
   }
 
   public async saveMonitoringData(): Promise<void> {
-    const airQualityData: any = await getAirQualityData(process.env.EPA_API_ID, 0, 1);
-    if (airQualityData.hasOwnProperty("data")
-      && airQualityData.data.length > 0) {
-      //PM2.5懸浮粒子濃度
-      const concentration = Number.parseInt(airQualityData.data[0].Concentration);
-
-      dayjs.extend(utc);
-      dayjs.extend(timezone);
-      const airQualityPo: AirQualityDoc = new AirQualityModel({
-        siteId: Number.parseInt(airQualityData.data[0].SiteId),
-        county: airQualityData.data[0].County,
-        siteName: airQualityData.data[0].SiteName,
-        monitorDate: airQualityData.data[0].MonitorDate,
-        itemName: airQualityData.data[0].ItemName,
-        itemEngName: airQualityData.data[0].ItemEngName,
-        concentration: concentration,
-        suggestion: this.getSuggestion(concentration),
-        createDate: dayjs().tz('Asia/Taipei').toDate(),
-      });
-
-      this.airQualityDao.saveMonitoringData(airQualityPo);
-    }
+    const airQualityData: AirQuality = await getAirQualityData(process.env.EPA_API_ID, 0, 1);
+    airQualityData.suggestion = this.getSuggestion(airQualityData.concentration);
+    const airQualityPo: AirQualityDoc = new AirQualityModel(airQualityData);
+    await this.airQualityDao.saveMonitoringData(airQualityPo);
   }
 
   /**
    * 取得相對建議
    * @param concentration PM2.5懸浮粒子濃度
-   * @returns Suggestion
+   * @returns Suggestion 建議
    */
   private getSuggestion(concentration: number): string {
     switch (true) {

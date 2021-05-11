@@ -24,50 +24,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
-const dayjs_1 = __importDefault(require("dayjs"));
-const utc_1 = __importDefault(require("dayjs/plugin/utc"));
-const timezone_1 = __importDefault(require("dayjs/plugin/timezone"));
 const api_1 = require("../api/api");
 const AirQualityModel_1 = __importDefault(require("../model/AirQualityModel"));
+/**
+ * AirQualityServiceImpl 空氣品質實作服務
+ * @author Gordon Fang
+ * @date 2021-05-10
+ */
 class AirQualityServiceImpl {
     /**
      * 建構子
-     * @param airQualityDao AirQualityDao
+     * @param AirQualityDao 空氣品質實體持久層
      */
     constructor(airQualityDao) {
         this.airQualityDao = airQualityDao;
     }
-    /**
-     * 取得環保署Open API空氣數據、儲存到資料庫
-     * @param
-     * @returns
-     */
-    async saveEPAMonitoringData() {
+    async saveMonitoringData() {
         const airQualityData = await api_1.getAirQualityData(process.env.EPA_API_ID, 0, 1);
-        if (airQualityData.hasOwnProperty("data")
-            && airQualityData.data.length > 0) {
-            //PM2.5懸浮粒子濃度
-            const concentration = Number.parseInt(airQualityData.data[0].Concentration);
-            dayjs_1.default.extend(utc_1.default);
-            dayjs_1.default.extend(timezone_1.default);
-            const airQualityPo = new AirQualityModel_1.default({
-                siteId: Number.parseInt(airQualityData.data[0].SiteId),
-                county: airQualityData.data[0].County,
-                siteName: airQualityData.data[0].SiteName,
-                monitorDate: dayjs_1.default(airQualityData.data[0].MonitorDate).tz('Asia/Taipei').format('YYYY-MM-DD HH:mm:ss'),
-                itemName: airQualityData.data[0].ItemName,
-                itemEngName: airQualityData.data[0].ItemEngName,
-                concentration: concentration,
-                suggestion: this.getSuggestion(concentration),
-                createDate: dayjs_1.default().tz('Asia/Taipei').toDate(),
-            });
-            this.airQualityDao.saveMonitoringData(airQualityPo);
-        }
+        airQualityData.suggestion = this.getSuggestion(airQualityData.concentration);
+        const airQualityPo = new AirQualityModel_1.default(airQualityData);
+        await this.airQualityDao.saveMonitoringData(airQualityPo);
     }
     /**
      * 取得相對建議
      * @param concentration PM2.5懸浮粒子濃度
-     * @returns Suggestion
+     * @returns Suggestion 建議
      */
     getSuggestion(concentration) {
         switch (true) {
@@ -85,16 +66,9 @@ class AirQualityServiceImpl {
                 return "空氣品質為良好，污染程度低或無污染。";
         }
     }
-    /**
-     * 取得目前最新的空氣監測數據
-     * @param id
-     * @returns 空氣監測數據
-     */
-    fetchMonitoringData() {
-        let airQualityPo;
-        this.airQualityDao.fetechLatestData()
-            .then((result) => airQualityPo = result)
-            .catch((err) => console.error(err));
+    async fetchMonitoringData() {
+        const airQualityPo = await this.airQualityDao.fetechLatestData();
+        console.log('selected one row.');
         return airQualityPo;
     }
 }

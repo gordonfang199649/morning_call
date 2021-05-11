@@ -1,14 +1,14 @@
 import AirQualityModel, { AirQuality, AirQualityDoc } from "../model/AirQualityModel";
 
 /**
- * AirQualityDao
+ * AirQualityDao 空氣品質實體持久層
  * @author Gordon Fang
  * @date 2021-05-10
  */
 export default class AirQualityDao {
   /**
    * 監測數據儲存至資料庫
-   * @param airQualityPo 空氣品質實體
+   * @param airQualityPo 空氣品質實體 Document
    * @returns
    */
   public async saveMonitoringData(airQualityPo: AirQualityDoc): Promise<void> {

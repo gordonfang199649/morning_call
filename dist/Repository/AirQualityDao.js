@@ -3,47 +3,35 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = require("mongoose");
-require("../connection/connect");
 const AirQualityModel_1 = __importDefault(require("../model/AirQualityModel"));
 /**
- * AirQualityDao
+ * AirQualityDao 空氣品質實體持久層
+ * @author Gordon Fang
+ * @date 2021-05-10
  */
 class AirQualityDao {
     /**
-     *
-     * @param airQualityPo
+     * 監測數據儲存至資料庫
+     * @param airQualityPo 空氣品質實體 Document
+     * @returns
      */
     async saveMonitoringData(airQualityPo) {
         try {
             await airQualityPo.save();
-            console.log("successfully inserted one row.");
+            console.log("inserted one row.");
         }
         catch (err) {
             console.error(err);
         }
-        await mongoose_1.disconnect();
     }
     /**
-     *
-     * @param id
-     * @returns
+     * 取得資料庫最新監測數據
+     * @param
+     * @returns AirQuality 空氣品質實體
      */
     async fetechLatestData() {
         let airQualityPo;
-        try {
-            await AirQualityModel_1.default.findOne({})
-                .sort({ 'monitorDate': 'desc' })
-                .exec((err, airQuality) => {
-                if (err)
-                    throw err;
-                airQualityPo = airQuality;
-            });
-        }
-        catch (error) {
-            console.error(error);
-        }
-        // await disconnect();
+        airQualityPo = await AirQualityModel_1.default.findOne().sort({ '_id': 'desc' }).exec();
         return airQualityPo;
     }
 }

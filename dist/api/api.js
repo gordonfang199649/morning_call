@@ -24,6 +24,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getWeatherPredictData = exports.getAirQualityData = void 0;
 const axios_1 = __importDefault(require("axios"));
+const dayjs_1 = __importDefault(require("dayjs"));
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const airQualityRequest = axios_1.default.create({
@@ -39,7 +40,20 @@ const weatherPredictRequest = axios_1.default.create({
  * @param  top 筆數
  * @returns 空氣品質監測數據
  */
-const getAirQualityData = (site, skip, top) => airQualityRequest.get(`${site}?%24skip=${skip}&%24top=${top}&%24format=json`);
+const getAirQualityData = (site, skip, top) => airQualityRequest.get(`${site}?%24skip=${skip}&%24top=${top}&%24format=json`).then((res) => {
+    const data = res.data[0];
+    return {
+        siteId: Number.parseInt(data.SiteId),
+        county: data.County,
+        siteName: data.SiteName,
+        monitorDate: data.MonitorDate,
+        itemName: data.ItemName,
+        itemEngName: data.ItemEngName,
+        concentration: Number.parseInt(data.Concentration),
+        suggestion: '',
+        createDate: dayjs_1.default().toDate(),
+    };
+});
 exports.getAirQualityData = getAirQualityData;
 /**
  *中央氣象局開放資料平臺之資料擷取API
@@ -49,6 +63,16 @@ exports.getAirQualityData = getAirQualityData;
  * @param  endTime
  * @returns 氣象局天氣預報綜合描述
  */
-const getWeatherPredictData = (countryCode, locationName, startTime, endTime) => weatherPredictRequest.get(encodeURI(`${countryCode}?Authorization=${process.env.CWB_AUTH_KEY}&limit=1&offset=0&format=JSON&locationName=${locationName}&elementName=WeatherDescription&sort=time&startTime=${startTime}&timeFrom=${startTime}&timeTo=${endTime}`));
+const getWeatherPredictData = (countryCode, locationName, startTime, endTime) => weatherPredictRequest.get(encodeURI(`${countryCode}?Authorization=${process.env.CWB_AUTH_KEY}&limit=1&offset=0&format=JSON&locationName=${locationName}&elementName=WeatherDescription&sort=time&timeFrom=${startTime}&timeTo=${endTime}`)).then((res) => {
+    const loc = res.data.records.locations[0];
+    const el = loc.location[0].weatherElement[0].time[0];
+    return {
+        locationsName: `${loc.locationsName}${process.env.LOCATION_NAME}`,
+        startTime: el.startTime,
+        endTime: el.endTime,
+        elementValue: el.elementValue[0].value,
+        createDate: dayjs_1.default().toDate(),
+    };
+});
 exports.getWeatherPredictData = getWeatherPredictData;
 //# sourceMappingURL=api.js.map
