@@ -22,6 +22,9 @@ export default class AirQualityServiceImpl implements AirQualityService {
     this.airQualityDao = airQualityDao;
   }
 
+  /**
+   * @override
+   */
   public async saveMonitoringData(): Promise<void> {
     const airQualityData: AirQuality = await getAirQualityData(process.env.EPA_API_ID, 0, 1);
     airQualityData.suggestion = this.getSuggestion(airQualityData.concentration);
@@ -51,6 +54,9 @@ export default class AirQualityServiceImpl implements AirQualityService {
     }
   }
 
+  /**
+   * @override
+   */
   public async fetchMonitoringData(): Promise<AirQuality> {
     const airQualityPo: AirQuality = await this.airQualityDao.fetechLatestData();
     console.log('selected one row.')

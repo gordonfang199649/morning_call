@@ -30,5 +30,5 @@ export const airQualityReportScript = (airQuality: AirQuality): string => {
  * @returns 播報腳本
  */
 export const weatherPredictReportScript = (weatherPredict: WeatherPredict): string => {
-    return `接下來為您播報今日天氣，${weatherPredict.locationsName}從${weatherPredict.startTime}到${weatherPredict.endTime}，天氣狀況為${weatherPredict.elementValue}，今日氣象預報播報完畢，祝您有美好的一天！再見!`;
+    return `接下來為您播報今日天氣，${weatherPredict.locationsName}從${weatherPredict.startTime}到${weatherPredict.endTime}，天氣狀況為${weatherPredict.elementValue}，今日氣象預報播報完畢，祝您有美好的一天再見!`;
 }
