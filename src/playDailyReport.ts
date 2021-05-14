@@ -58,7 +58,7 @@ async function generateAudioFile(script: string, fileName: string): Promise<void
     const rawAudio: Array<AudioText> = await getAllAudioBase64(script, { lang: 'zh-TW' })
     const base64Audio: string = rawAudio.map((raw) => { return raw.base64 }).join('');
     const audioBuffer = Buffer.from(base64Audio, 'base64');
-    fs.writeFileSync(fileName, audioBuffer);
+    fs.writeFileSync(`${__dirname}/${fileName}`, audioBuffer);
     console.log('generated audio file.')
 }
 
@@ -68,9 +68,9 @@ async function generateAudioFile(script: string, fileName: string): Promise<void
  * @returns
  */
 function executeCommands(fileName: string): void {
-    execSync(`mpg123 ./${fileName}`);
+    execSync(`mpg123 -r 50 --stereo ${__dirname}/${fileName}`);
     console.log(`finised playing file ${fileName}`);
-    exec(`rm ./${fileName}`, (err, stdout, stderr) => {
+    exec(`rm ${__dirname}/${fileName}`, (err, stdout, stderr) => {
         if (err) console.error(err);
         console.log(`deleted file ${fileName}`);
     });

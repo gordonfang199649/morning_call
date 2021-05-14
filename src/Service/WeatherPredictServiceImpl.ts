@@ -31,7 +31,7 @@ export default class WeatherPredictServiceImpl implements WeatherPredictService 
         const endTime: Dayjs = dayjs().set('hour', Number.parseInt(process.env.END_HOUR)).set('minute', 0).set('second', 0);
 
         // 欲撈取資料起始時間點在排程觸發時間點前，將起始、結束時間各加一天
-        // 因OPEN API只保留未來天氣預測資料
+        // 因OPEN API只保留「未來」天氣預測資料
         if (startTime.isBefore(dayjs())) {
             this.increaseDays([startTime, endTime], 1);
         }
