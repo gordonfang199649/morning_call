@@ -9,7 +9,7 @@ import WeatherPredictService from "./Service/WeatherPredictService";
 import WeatherPredictServiceImpl from "./Service/WeatherPredictServiceImpl";
 
 /**
- * 
+ * 週期性刪除監測數據
  * @author Gordon Fang
  * @date 2021-05-14
  */
