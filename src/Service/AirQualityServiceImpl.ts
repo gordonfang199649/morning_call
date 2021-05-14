@@ -59,7 +59,14 @@ export default class AirQualityServiceImpl implements AirQualityService {
    */
   public async fetchMonitoringData(): Promise<AirQuality> {
     const airQualityPo: AirQuality = await this.airQualityDao.fetechLatestData();
-    console.log('selected one row.')
     return airQualityPo;
   }
+
+  /**
+   * @override
+   */
+  public async deleteMonitoringData(startDate: Date, endDate: Date): Promise<void> {
+    await this.airQualityDao.deleteDataByDuration(startDate, endDate);
+  }
+
 }

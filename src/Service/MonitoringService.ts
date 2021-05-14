@@ -19,4 +19,12 @@ export default interface MonitoringService {
     * @returns
     */
   fetchMonitoringData(): Promise<Entity>;
+
+  /**
+   * 依資料產生的時間區間刪監測數據
+   * @param startDate 起始日期
+   * @param endDate 結束日期
+   * @returns
+   */
+  deleteMonitoringData(startDate: Date, endDate: Date): Promise<void>;
 }

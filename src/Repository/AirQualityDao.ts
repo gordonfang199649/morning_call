@@ -30,4 +30,27 @@ export default class AirQualityDao {
     airQualityPo = await AirQualityModel.findOne().sort({ '_id': 'desc' }).exec();
     return airQualityPo;
   }
+
+  /**
+   * 刪除區間內的資料
+   * @param startDate 資料區間起始日期
+   * @param endDate 資料區間結束日期
+   */
+  public async deleteDataByDuration(startDate: Date, endDate: Date): Promise<void> {
+    const rowNumber = await AirQualityModel.count({
+      createDate: {
+        $gte: startDate,
+        $lte: endDate
+      }
+    }).exec();
+
+    await AirQualityModel.deleteMany({
+      createDate: {
+        $gte: startDate,
+        $lte: endDate
+      }
+    }).exec();
+
+    console.log(`deleted ${rowNumber} rows`);
+  }
 }

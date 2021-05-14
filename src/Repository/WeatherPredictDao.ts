@@ -28,6 +28,30 @@ export default class WeatherPredictDao {
     public async fetechLatestData(): Promise<WeatherPredict> {
         let weatherPredictPo: WeatherPredict;
         weatherPredictPo = await WeatherPridictModel.findOne().sort({ '_id': 'desc' }).exec();
+        console.log('selected one row.')
         return weatherPredictPo;
+    }
+
+    /**
+  * 刪除區間內的資料
+  * @param startDate 資料區間起始日期
+  * @param endDate 資料區間結束日期
+  */
+    public async deleteDataByDuration(startDate: Date, endDate: Date): Promise<void> {
+        const rowNumber = await WeatherPridictModel.count({
+            createDate: {
+                $gte: startDate,
+                $lte: endDate
+            }
+        }).exec();
+
+        await WeatherPridictModel.deleteMany({
+            createDate: {
+                $gte: startDate,
+                $lte: endDate
+            }
+        }).exec();
+
+        console.log(`deleted ${rowNumber} rows`);
     }
 }

@@ -16,9 +16,9 @@ export default class WeatherPredictServiceImpl implements WeatherPredictService 
     private weatherPredictDao: WeatherPredictDao;
 
     /**
-   * 建構子
-   * @param WeatherPredictDao 天氣預報實體持久層
-   */
+     * 建構子
+     * @param WeatherPredictDao 天氣預報實體持久層
+     */
     constructor(weatherPredictDao: WeatherPredictDao) {
         this.weatherPredictDao = weatherPredictDao;
     }
@@ -69,5 +69,12 @@ export default class WeatherPredictServiceImpl implements WeatherPredictService 
     public async fetchMonitoringData(): Promise<WeatherPredict> {
         const weatherPredictPo: WeatherPredict = await this.weatherPredictDao.fetechLatestData();
         return weatherPredictPo;
+    }
+
+    /**
+     * @override
+     */
+    public async deleteMonitoringData(startDate: Date, endDate: Date): Promise<void> {
+        await this.weatherPredictDao.deleteDataByDuration(startDate, endDate);
     }
 }
