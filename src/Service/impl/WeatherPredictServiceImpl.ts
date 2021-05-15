@@ -1,10 +1,12 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 import dayjs, { Dayjs } from "dayjs";
-import { getWeatherPredictData } from "../api/api";
-import WeatherPridictModel, { WeatherPredict, WeatherPredictDoc } from "../model/WeatherPridictModel";
-import WeatherPredictService from "./WeatherPredictService";
-import WeatherPredictDao from "../Repository/WeatherPredictDao";
+import { getWeatherPredictData } from "../../api/api";
+import WeatherPridictModel, { WeatherPredict, WeatherPredictDoc } from "../../model/WeatherPridictModel";
+import WeatherPredictService from "../WeatherPredictService";
+import WeatherPredictDao from "../../Repository/WeatherPredictDao";
+import NoDataError from "../../model/NoDataError";
+import { noDataFoundScript } from "../../scripts/scripts";
 
 /**
  * WeatherPredictServiceImpl 天氣預報實作服務
@@ -68,6 +70,9 @@ export default class WeatherPredictServiceImpl implements WeatherPredictService 
      */
     public async fetchMonitoringData(): Promise<WeatherPredict> {
         const weatherPredictPo: WeatherPredict = await this.weatherPredictDao.fetechLatestData();
+        if (weatherPredictPo == null) {
+            return Promise.reject(new NoDataError(noDataFoundScript('weatherPredict')));
+        }
         return weatherPredictPo;
     }
 

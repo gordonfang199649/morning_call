@@ -1,35 +1,49 @@
-
 import { connection, disconnection } from './connection/connect'
 import Entity from "./model/Entity";
 import { AirQuality } from "./model/AirQualityModel";
 import AirQualityDao from "./Repository/AirQualityDao";
 import AirQualityService from "./Service/AirQualityService";
-import AirQualityServiceImpl from "./Service/AirQualityServiceImpl";
+import AirQualityServiceImpl from "./Service/impl/AirQualityServiceImpl";
 import { WeatherPredict } from "./model/WeatherPridictModel";
 import WeatherPredictDao from "./Repository/WeatherPredictDao";
 import WeatherPredictService from "./Service/WeatherPredictService";
-import WeatherPredictServiceImpl from "./Service/WeatherPredictServiceImpl";
+import WeatherPredictServiceImpl from "./Service/impl/WeatherPredictServiceImpl";
 import { airQualityReportScript, weatherPredictReportScript } from './scripts/scripts'
 import fs from 'fs';
 import { getAllAudioBase64 } from 'google-tts-api';
 import { exec, execSync } from "child_process";
 import AudioText from './model/AudioText';
+import NoDataError from './model/NoDataError';
 
 /**
  * 排程-播報每日地區空氣品質、天氣預測
  * @author Gordon Fang
+ * @date 2021-05-10
  */
 (async (): Promise<void> => {
-    connection();
-    const airQualityService: AirQualityService = new AirQualityServiceImpl(new AirQualityDao());
-    await airQualityService.saveMonitoringData();
-    const airQualityPo: Entity = await airQualityService.fetchMonitoringData();
+    await connection();
     const weatherPredictService: WeatherPredictService = new WeatherPredictServiceImpl(new WeatherPredictDao());
-    const weatherPredictPo: Entity = await weatherPredictService.fetchMonitoringData();
-    disconnection();
+    const airQualityService: AirQualityService = new AirQualityServiceImpl(new AirQualityDao());
+    let airQualityPo: Entity;
+    let weatherPredictPo: Entity;
+    let script: string;
 
-    const fileName: string = 'morning_call.mp3';
-    const script: string = generateScript(airQualityPo).concat(generateScript(weatherPredictPo));
+    await airQualityService.saveMonitoringData();
+    try {
+        airQualityPo = await airQualityService.fetchMonitoringData();
+        weatherPredictPo = await weatherPredictService.fetchMonitoringData();
+        script = generateScript(airQualityPo).concat(generateScript(weatherPredictPo))
+    } catch (err) {
+        if (err instanceof NoDataError) {
+            script = err.message;
+        } else {
+            console.error(err);
+        }
+    } finally {
+        disconnection();
+    }
+
+    const fileName: string = `${__dirname}/morning_call.mp3`;
     await generateAudioFile(script, fileName);
     executeCommands(fileName);
 })();
@@ -58,8 +72,8 @@ async function generateAudioFile(script: string, fileName: string): Promise<void
     const rawAudio: Array<AudioText> = await getAllAudioBase64(script, { lang: 'zh-TW' })
     const base64Audio: string = rawAudio.map((raw) => { return raw.base64 }).join('');
     const audioBuffer = Buffer.from(base64Audio, 'base64');
-    fs.writeFileSync(`${__dirname}/${fileName}`, audioBuffer);
-    console.log('generated audio file.')
+    fs.writeFileSync(`${fileName}`, audioBuffer);
+    console.log(`generated audio file: ${fileName}`)
 }
 
 /**
@@ -68,9 +82,9 @@ async function generateAudioFile(script: string, fileName: string): Promise<void
  * @returns
  */
 function executeCommands(fileName: string): void {
-    execSync(`mpg123 -r 50 --stereo ${__dirname}/${fileName}`);
+    execSync(`mpg123 ${fileName}`);
     console.log(`finised playing file ${fileName}`);
-    exec(`rm ${__dirname}/${fileName}`, (err, stdout, stderr) => {
+    exec(`rm ${fileName}`, (err, stdout, stderr) => {
         if (err) console.error(err);
         console.log(`deleted file ${fileName}`);
     });

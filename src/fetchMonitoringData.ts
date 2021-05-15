@@ -1,8 +1,7 @@
-
 import { connection, disconnection } from './connection/connect'
 import WeatherPredictDao from "./Repository/WeatherPredictDao";
 import WeatherPredictService from "./Service/WeatherPredictService";
-import WeatherPredictServiceImpl from "./Service/WeatherPredictServiceImpl";
+import WeatherPredictServiceImpl from "./Service/impl/WeatherPredictServiceImpl";
 
 /**
  * 排程-預先撈取天氣預測資料

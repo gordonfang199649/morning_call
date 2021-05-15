@@ -28,7 +28,6 @@ export default class WeatherPredictDao {
     public async fetechLatestData(): Promise<WeatherPredict> {
         let weatherPredictPo: WeatherPredict;
         weatherPredictPo = await WeatherPridictModel.findOne().sort({ '_id': 'desc' }).exec();
-        console.log('selected one row.')
         return weatherPredictPo;
     }
 

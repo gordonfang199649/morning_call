@@ -1,12 +1,11 @@
-
 import dayjs from 'dayjs';
 import { connection, disconnection } from './connection/connect'
 import AirQualityDao from './Repository/AirQualityDao';
 import WeatherPredictDao from "./Repository/WeatherPredictDao";
 import AirQualityService from './Service/AirQualityService';
-import AirQualityServiceImpl from './Service/AirQualityServiceImpl';
+import AirQualityServiceImpl from './Service/impl/AirQualityServiceImpl';
 import WeatherPredictService from "./Service/WeatherPredictService";
-import WeatherPredictServiceImpl from "./Service/WeatherPredictServiceImpl";
+import WeatherPredictServiceImpl from "./Service/impl/WeatherPredictServiceImpl";
 
 /**
  * 週期性刪除監測數據

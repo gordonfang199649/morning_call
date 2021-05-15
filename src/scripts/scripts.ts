@@ -32,3 +32,10 @@ export const airQualityReportScript = (airQuality: AirQuality): string => {
 export const weatherPredictReportScript = (weatherPredict: WeatherPredict): string => {
     return `接下來為您播報今日天氣，${weatherPredict.locationsName}從${weatherPredict.startTime}到${weatherPredict.endTime}，天氣狀況為${weatherPredict.elementValue}，今日氣象預報播報完畢，祝您有美好的一天再見!`;
 }
+
+/**
+ * 提供資料庫無監測數據的語音腳本
+ * @param type 監測數據類別
+ * @returns 語音腳本
+ */
+export const noDataFoundScript = (type: string) => `很抱歉，資料庫目前尚無${type == 'airQuality' ? '空氣' : '天氣預測'}監測數據，請重新撈取資料，謝謝。`;

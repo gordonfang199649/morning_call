@@ -1,9 +1,10 @@
 import * as dotenv from "dotenv";
 dotenv.config();
-import { getAirQualityData } from "../api/api";
-import AirQualityModel, { AirQuality, AirQualityDoc } from "../model/AirQualityModel";
-import AirQualityDao from "../Repository/AirQualityDao";
-import AirQualityService from "./AirQualityService";
+import { getAirQualityData } from "../../api/api";
+import AirQualityModel, { AirQuality, AirQualityDoc } from "../../model/AirQualityModel";
+import AirQualityDao from "../../Repository/AirQualityDao";
+import { noDataFoundScript } from "../../scripts/scripts";
+import AirQualityService from "../AirQualityService";
 
 /**
  * AirQualityServiceImpl 空氣品質實作服務
@@ -59,6 +60,9 @@ export default class AirQualityServiceImpl implements AirQualityService {
    */
   public async fetchMonitoringData(): Promise<AirQuality> {
     const airQualityPo: AirQuality = await this.airQualityDao.fetechLatestData();
+    if (airQualityPo == null) {
+      return Promise.reject(noDataFoundScript('airQuality'));
+    }
     return airQualityPo;
   }
 
@@ -68,5 +72,4 @@ export default class AirQualityServiceImpl implements AirQualityService {
   public async deleteMonitoringData(startDate: Date, endDate: Date): Promise<void> {
     await this.airQualityDao.deleteDataByDuration(startDate, endDate);
   }
-
 }

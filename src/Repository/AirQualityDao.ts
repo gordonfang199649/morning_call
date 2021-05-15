@@ -14,7 +14,6 @@ export default class AirQualityDao {
   public async saveMonitoringData(airQualityPo: AirQualityDoc): Promise<void> {
     try {
       await airQualityPo.save();
-      console.log("inserted one row.");
     } catch (err) {
       console.error(err);
     }
@@ -51,6 +50,5 @@ export default class AirQualityDao {
       }
     }).exec();
 
-    console.log(`deleted ${rowNumber} rows`);
   }
 }
