@@ -21,7 +21,7 @@ import NoDataError from './model/NoDataError';
  * @date 2021-05-10
  */
 (async (): Promise<void> => {
-    await connection();
+    connection();
     const weatherPredictService: WeatherPredictService = new WeatherPredictServiceImpl(new WeatherPredictDao());
     const airQualityService: AirQualityService = new AirQualityServiceImpl(new AirQualityDao());
     let airQualityPo: Entity;

@@ -10,7 +10,7 @@ export const connection = async () => {
     });
     console.log('successfully connected with mongodb');
   } catch (error) {
-    console.log(error);
+    console.error(error);
     await disconnect();
     console.log('disconnected with mongodb.')
   }

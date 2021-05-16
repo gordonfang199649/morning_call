@@ -37,7 +37,7 @@ export default class WeatherPredictDao {
   * @param endDate 資料區間結束日期
   */
     public async deleteDataByDuration(startDate: Date, endDate: Date): Promise<void> {
-        const rowNumber = await WeatherPridictModel.count({
+        const rowNumber = await WeatherPridictModel.countDocuments({
             createDate: {
                 $gte: startDate,
                 $lte: endDate

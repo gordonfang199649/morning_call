@@ -36,7 +36,7 @@ export default class AirQualityDao {
    * @param endDate 資料區間結束日期
    */
   public async deleteDataByDuration(startDate: Date, endDate: Date): Promise<void> {
-    const rowNumber = await AirQualityModel.count({
+    const rowNumber = await AirQualityModel.countDocuments({
       createDate: {
         $gte: startDate,
         $lte: endDate
@@ -50,5 +50,6 @@ export default class AirQualityDao {
       }
     }).exec();
 
+    console.log(`deleted ${rowNumber} rows`);
   }
 }
