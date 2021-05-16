@@ -1,9 +1,9 @@
+import * as dotenv from "dotenv";
+dotenv.config();
 import axios from "axios";
 import dayjs from "dayjs";
-import * as dotenv from "dotenv";
 import { AirQuality } from "../model/AirQualityModel";
 import { WeatherPredict } from "../model/WeatherPridictModel";
-dotenv.config();
 
 const airQualityRequest = axios.create({
   baseURL: "https://opendata.epa.gov.tw/api/v1/",
@@ -25,7 +25,7 @@ export const getAirQualityData = (site: string, skip: number, top: number): Prom
     `${site}?%24skip=${skip}&%24top=${top}&%24format=json`
   ).then((res: any) => {
     const data = res.data[0];
-    return <AirQuality>
+    return Promise.resolve(<AirQuality>
       {
         siteId: Number.parseInt(data.SiteId),
         county: data.County,
@@ -36,7 +36,7 @@ export const getAirQualityData = (site: string, skip: number, top: number): Prom
         concentration: Number.parseInt(data.Concentration),
         suggestion: '',
         createDate: dayjs().toDate(),
-      }
+      })
   });
 
 /**
@@ -55,11 +55,11 @@ export const getWeatherPredictData = (countryCode: string, locationName: string,
   ).then((res: any) => {
     const loc = res.data.records.locations[0];
     const el = loc.location[0].weatherElement[0].time[0];
-    return <WeatherPredict>{
+    return Promise.resolve(<WeatherPredict>{
       locationsName: `${loc.locationsName}${process.env.LOCATION_NAME}`,
       startTime: el.startTime,
       endTime: el.endTime,
       elementValue: el.elementValue[0].value,
       createDate: dayjs().toDate(),
-    };
+    });
   });

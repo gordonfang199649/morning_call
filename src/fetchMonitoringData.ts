@@ -8,9 +8,13 @@ import WeatherPredictServiceImpl from "./Service/impl/WeatherPredictServiceImpl"
  * @author Gordon Fang
  * @date 2021-05-13
  */
-(async (): Promise<void> => {
+((): void => {
     connection();
     const weatherPredictService: WeatherPredictService = new WeatherPredictServiceImpl(new WeatherPredictDao());
-    await weatherPredictService.saveMonitoringData();
-    disconnection();
+    weatherPredictService.saveMonitoringData()
+        .catch((err) => {
+            console.error(err);
+        }).finally(() => {
+            disconnection();
+        })
 })();
