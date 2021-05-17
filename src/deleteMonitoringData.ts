@@ -16,7 +16,12 @@ import WeatherPredictServiceImpl from "./Service/impl/WeatherPredictServiceImpl"
     connection();
     const weatherPredictService: WeatherPredictService = new WeatherPredictServiceImpl(new WeatherPredictDao());
     const airQualityService: AirQualityService = new AirQualityServiceImpl(new AirQualityDao());
-    await weatherPredictService.deleteMonitoringData(dayjs().add(-7, 'd').toDate(), dayjs().toDate());
-    await airQualityService.deleteMonitoringData(dayjs().add(-7, 'd').toDate(), dayjs().toDate());
-    disconnection();
+    try {
+        await weatherPredictService.deleteMonitoringData(dayjs().add(-7, 'd').toDate(), dayjs().toDate());
+        await airQualityService.deleteMonitoringData(dayjs().add(-7, 'd').toDate(), dayjs().toDate());
+    } catch (err) {
+        console.error(err);
+    } finally {
+        disconnection();
+    }
 })();
