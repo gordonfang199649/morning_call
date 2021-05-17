@@ -6,7 +6,7 @@ import { AirQuality } from "../model/AirQualityModel";
 import { WeatherPredict } from "../model/WeatherPridictModel";
 
 const airQualityRequest = axios.create({
-  baseURL: "https://opendata.epa.gov.tw/api/v1/",
+  baseURL: "https://data.epa.gov.tw/api/v1/",
 });
 
 const weatherPredictRequest = axios.create({
@@ -16,15 +16,15 @@ const weatherPredictRequest = axios.create({
 /**
  * 行政院環境保護署 - 環境資源資料開放平臺：開放資料 OpenAPI
  * @param site 監測站點
- * @param  skip 跳過筆數
- * @param  top 筆數
+ * @param  offset 跳過筆數
+ * @param  limit 筆數
  * @returns 空氣品質監測數據
  */
-export const getAirQualityData = (site: string, skip: number, top: number): Promise<AirQuality> =>
+export const getAirQualityData = (site: string, offset: number, limit: number): Promise<AirQuality> =>
   airQualityRequest.get(
-    `${site}?%24skip=${skip}&%24top=${top}&%24format=json`
+    `${site}?offset=${offset}&limit=${limit}&api_key=${process.env.EPA_AUTH_KEY}`
   ).then((res: any) => {
-    const data = res.data[0];
+    const data = res.data.records[0];
     return Promise.resolve(<AirQuality>
       {
         siteId: Number.parseInt(data.SiteId),
