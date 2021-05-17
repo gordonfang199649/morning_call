@@ -28,8 +28,8 @@ import NoDataError from './model/NoDataError';
     let weatherPredictPo: Entity;
     let script: string;
 
-    await airQualityService.saveMonitoringData();
     try {
+        await airQualityService.saveMonitoringData();
         airQualityPo = await airQualityService.fetchMonitoringData();
         weatherPredictPo = await weatherPredictService.fetchMonitoringData();
         script = generateScript(airQualityPo).concat(generateScript(weatherPredictPo))
