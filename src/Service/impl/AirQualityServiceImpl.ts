@@ -61,7 +61,7 @@ export default class AirQualityServiceImpl implements AirQualityService {
    */
   public async fetchMonitoringData(): Promise<AirQuality> {
     const airQualityPo: AirQuality = await this.airQualityDao.fetechLatestData();
-    if (airQualityPo == null) {
+    if (airQualityPo === null) {
       return Promise.reject(noDataFoundScript('airQuality'));
     }
     return airQualityPo;

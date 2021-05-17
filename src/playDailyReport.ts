@@ -43,9 +43,11 @@ import NoDataError from './model/NoDataError';
         disconnection();
     }
 
-    const fileName: string = `${__dirname}/morning_call.mp3`;
-    await generateAudioFile(script, fileName);
-    executeCommands(fileName);
+    if (script !== undefined) {
+        const fileName: string = `${__dirname}/morning_call.mp3`;
+        await generateAudioFile(script, fileName);
+        executeCommands(fileName);
+    }
 })();
 
 /**

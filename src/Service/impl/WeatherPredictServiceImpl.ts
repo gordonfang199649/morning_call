@@ -59,7 +59,7 @@ export default class WeatherPredictServiceImpl implements WeatherPredictService 
      */
     public async fetchMonitoringData(): Promise<WeatherPredict> {
         const weatherPredictPo: WeatherPredict = await this.weatherPredictDao.fetechLatestData();
-        if (weatherPredictPo == null) {
+        if (weatherPredictPo === null) {
             return Promise.reject(new NoDataError(noDataFoundScript('weatherPredict')));
         }
         return weatherPredictPo;
