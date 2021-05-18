@@ -1,7 +1,7 @@
 import { connection, disconnection } from './connection/connect'
 import WeatherPredictDao from "./Repository/WeatherPredictDao";
-import WeatherPredictService from "./Service/WeatherPredictService";
 import WeatherPredictServiceImpl from "./Service/impl/WeatherPredictServiceImpl";
+import MonitoringService from './Service/MonitoringService';
 
 /**
  * 排程-預先撈取天氣預測資料
@@ -10,7 +10,7 @@ import WeatherPredictServiceImpl from "./Service/impl/WeatherPredictServiceImpl"
  */
 ((): void => {
     connection();
-    const weatherPredictService: WeatherPredictService = new WeatherPredictServiceImpl(new WeatherPredictDao());
+    const weatherPredictService: MonitoringService = new WeatherPredictServiceImpl(new WeatherPredictDao());
     weatherPredictService.saveMonitoringData()
         .catch((err) => {
             console.error(err);

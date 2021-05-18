@@ -2,11 +2,9 @@ import { connection, disconnection } from './connection/connect'
 import Entity from "./model/Entity";
 import { AirQuality } from "./model/AirQualityModel";
 import AirQualityDao from "./Repository/AirQualityDao";
-import AirQualityService from "./Service/AirQualityService";
 import AirQualityServiceImpl from "./Service/impl/AirQualityServiceImpl";
 import { WeatherPredict } from "./model/WeatherPridictModel";
 import WeatherPredictDao from "./Repository/WeatherPredictDao";
-import WeatherPredictService from "./Service/WeatherPredictService";
 import WeatherPredictServiceImpl from "./Service/impl/WeatherPredictServiceImpl";
 import { airQualityReportScript, weatherPredictReportScript } from './scripts/scripts'
 import fs from 'fs';
@@ -14,6 +12,7 @@ import { getAllAudioBase64 } from 'google-tts-api';
 import { exec, execSync } from "child_process";
 import AudioText from './model/AudioText';
 import NoDataError from './model/NoDataError';
+import MonitoringService from './Service/MonitoringService';
 
 /**
  * 排程-播報每日地區空氣品質、天氣預測
@@ -22,8 +21,8 @@ import NoDataError from './model/NoDataError';
  */
 (async (): Promise<void> => {
     connection();
-    const weatherPredictService: WeatherPredictService = new WeatherPredictServiceImpl(new WeatherPredictDao());
-    const airQualityService: AirQualityService = new AirQualityServiceImpl(new AirQualityDao());
+    const weatherPredictService: MonitoringService = new WeatherPredictServiceImpl(new WeatherPredictDao());
+    const airQualityService: MonitoringService = new AirQualityServiceImpl(new AirQualityDao());
     let airQualityPo: Entity;
     let weatherPredictPo: Entity;
     let script: string;
