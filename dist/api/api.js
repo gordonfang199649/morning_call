@@ -23,26 +23,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getWeatherPredictData = exports.getAirQualityData = void 0;
-const axios_1 = __importDefault(require("axios"));
-const dayjs_1 = __importDefault(require("dayjs"));
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
+const axios_1 = __importDefault(require("axios"));
+const dayjs_1 = __importDefault(require("dayjs"));
+const MonitoringItem_1 = __importDefault(require("../Enum/MonitoringItem"));
 const airQualityRequest = axios_1.default.create({
-    baseURL: "https://opendata.epa.gov.tw/api/v1/",
+    baseURL: "https://data.epa.gov.tw/api/v1/",
 });
 const weatherPredictRequest = axios_1.default.create({
     baseURL: "https://opendata.cwb.gov.tw/api/v1/rest/datastore/",
 });
 /**
  * 行政院環境保護署 - 環境資源資料開放平臺：開放資料 OpenAPI
- * @param site 監測站點
- * @param  skip 跳過筆數
- * @param  top 筆數
+ * @param  offset 跳過筆數
+ * @param  limit 筆數
  * @returns 空氣品質監測數據
  */
-const getAirQualityData = (site, skip, top) => airQualityRequest.get(`${site}?%24skip=${skip}&%24top=${top}&%24format=json`).then((res) => {
-    const data = res.data[0];
-    return {
+const getAirQualityData = (offset, limit) => airQualityRequest.get(`${process.env.EPA_API_ID}?offset=${offset}&limit=${limit}&api_key=${process.env.EPA_AUTH_KEY}`).then((res) => {
+    const data = res.data.records.find((record) => record.ItemName == MonitoringItem_1.default.PM2PT5);
+    return Promise.resolve({
         siteId: Number.parseInt(data.SiteId),
         county: data.County,
         siteName: data.SiteName,
@@ -52,7 +52,7 @@ const getAirQualityData = (site, skip, top) => airQualityRequest.get(`${site}?%2
         concentration: Number.parseInt(data.Concentration),
         suggestion: '',
         createDate: dayjs_1.default().toDate(),
-    };
+    });
 });
 exports.getAirQualityData = getAirQualityData;
 /**
@@ -66,13 +66,13 @@ exports.getAirQualityData = getAirQualityData;
 const getWeatherPredictData = (countryCode, locationName, startTime, endTime) => weatherPredictRequest.get(encodeURI(`${countryCode}?Authorization=${process.env.CWB_AUTH_KEY}&limit=1&offset=0&format=JSON&locationName=${locationName}&elementName=WeatherDescription&sort=time&timeFrom=${startTime}&timeTo=${endTime}`)).then((res) => {
     const loc = res.data.records.locations[0];
     const el = loc.location[0].weatherElement[0].time[0];
-    return {
+    return Promise.resolve({
         locationsName: `${loc.locationsName}${process.env.LOCATION_NAME}`,
         startTime: el.startTime,
         endTime: el.endTime,
         elementValue: el.elementValue[0].value,
         createDate: dayjs_1.default().toDate(),
-    };
+    });
 });
 exports.getWeatherPredictData = getWeatherPredictData;
 //# sourceMappingURL=api.js.map

@@ -34,6 +34,26 @@ class WeatherPredictDao {
         weatherPredictPo = await WeatherPridictModel_1.default.findOne().sort({ '_id': 'desc' }).exec();
         return weatherPredictPo;
     }
+    /**
+  * 刪除區間內的資料
+  * @param startDate 資料區間起始日期
+  * @param endDate 資料區間結束日期
+  */
+    async deleteDataByDuration(startDate, endDate) {
+        const rowNumber = await WeatherPridictModel_1.default.countDocuments({
+            createDate: {
+                $gte: startDate,
+                $lte: endDate
+            }
+        }).exec();
+        await WeatherPridictModel_1.default.deleteMany({
+            createDate: {
+                $gte: startDate,
+                $lte: endDate
+            }
+        }).exec();
+        console.log(`deleted ${rowNumber} rows`);
+    }
 }
 exports.default = WeatherPredictDao;
 //# sourceMappingURL=WeatherPredictDao.js.map

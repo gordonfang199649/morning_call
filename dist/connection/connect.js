@@ -32,7 +32,7 @@ const connection = async () => {
         console.log('successfully connected with mongodb');
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         await mongoose_1.disconnect();
         console.log('disconnected with mongodb.');
     }

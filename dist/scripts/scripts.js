@@ -22,7 +22,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.weatherPredictReportScript = exports.airQualityReportScript = void 0;
+exports.noDataFoundScript = exports.weatherPredictReportScript = exports.airQualityReportScript = void 0;
 const dayjs_1 = __importDefault(require("dayjs"));
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
@@ -52,7 +52,14 @@ exports.airQualityReportScript = airQualityReportScript;
  * @returns 播報腳本
  */
 const weatherPredictReportScript = (weatherPredict) => {
-    return `接下來為您播報今日天氣，${weatherPredict.locationsName}從${weatherPredict.startTime}到${weatherPredict.endTime}，天氣狀況為${weatherPredict.elementValue}，今日氣象預報播報完畢，祝您有美好的一天！再見!`;
+    return `接下來為您播報今日天氣，${weatherPredict.locationsName}從${weatherPredict.startTime}到${weatherPredict.endTime}，天氣狀況為${weatherPredict.elementValue}，今日氣象預報播報完畢，祝您有美好的一天再見!`;
 };
 exports.weatherPredictReportScript = weatherPredictReportScript;
+/**
+ * 提供資料庫無監測數據的語音腳本
+ * @param type 監測數據類別
+ * @returns 語音腳本
+ */
+const noDataFoundScript = (type) => `很抱歉，資料庫目前尚無${type == 'airQuality' ? '空氣' : '天氣預測'}監測數據，請重新撈取資料，謝謝。`;
+exports.noDataFoundScript = noDataFoundScript;
 //# sourceMappingURL=scripts.js.map
