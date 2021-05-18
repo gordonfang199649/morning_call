@@ -15,14 +15,13 @@ const weatherPredictRequest = axios.create({
 
 /**
  * 行政院環境保護署 - 環境資源資料開放平臺：開放資料 OpenAPI
- * @param site 監測站點
  * @param  offset 跳過筆數
  * @param  limit 筆數
  * @returns 空氣品質監測數據
  */
-export const getAirQualityData = (site: string, offset: number, limit: number): Promise<AirQuality> =>
+export const getAirQualityData = (offset: number, limit: number): Promise<AirQuality> =>
   airQualityRequest.get(
-    `${site}?offset=${offset}&limit=${limit}&api_key=${process.env.EPA_AUTH_KEY}`
+    `${process.env.EPA_API_ID}?offset=${offset}&limit=${limit}&api_key=${process.env.EPA_AUTH_KEY}`
   ).then((res: any) => {
     const data = res.data.records[0];
     return Promise.resolve(<AirQuality>
