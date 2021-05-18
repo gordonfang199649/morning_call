@@ -24,7 +24,7 @@ export const getAirQualityData = (offset: number, limit: number): Promise<AirQua
   airQualityRequest.get(
     `${process.env.EPA_API_ID}?offset=${offset}&limit=${limit}&api_key=${process.env.EPA_AUTH_KEY}`
   ).then((res: any) => {
-    const data: any = res.data.records.find((record: any) => record.ItemName == MonitoringItem.PM2PT5);
+    const data: any = res.data.records.find((record: any) => record.ItemName === MonitoringItem.PM2PT5);
     return Promise.resolve(<AirQuality>
       {
         siteId: Number.parseInt(data.SiteId),

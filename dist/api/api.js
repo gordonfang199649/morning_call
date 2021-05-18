@@ -41,7 +41,7 @@ const weatherPredictRequest = axios_1.default.create({
  * @returns 空氣品質監測數據
  */
 const getAirQualityData = (offset, limit) => airQualityRequest.get(`${process.env.EPA_API_ID}?offset=${offset}&limit=${limit}&api_key=${process.env.EPA_AUTH_KEY}`).then((res) => {
-    const data = res.data.records.find((record) => record.ItemName == MonitoringItem_1.default.PM2PT5);
+    const data = res.data.records.find((record) => record.ItemName === MonitoringItem_1.default.PM2PT5);
     return Promise.resolve({
         siteId: Number.parseInt(data.SiteId),
         county: data.County,
