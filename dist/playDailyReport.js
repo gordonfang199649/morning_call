@@ -3,12 +3,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const connect_1 = require("./connection/connect");
-const AirQualityDao_1 = __importDefault(require("./Repository/AirQualityDao"));
-const AirQualityServiceImpl_1 = __importDefault(require("./Service/impl/AirQualityServiceImpl"));
-const WeatherPredictDao_1 = __importDefault(require("./Repository/WeatherPredictDao"));
-const WeatherPredictServiceImpl_1 = __importDefault(require("./Service/impl/WeatherPredictServiceImpl"));
-const scripts_1 = require("./scripts/scripts");
+const Connection_1 = require("./connection/Connection");
+const AirQualityDao_1 = __importDefault(require("./repository/AirQualityDao"));
+const AirQualityServiceImpl_1 = __importDefault(require("./service/impl/AirQualityServiceImpl"));
+const WeatherPredictDao_1 = __importDefault(require("./repository/WeatherPredictDao"));
+const WeatherPredictServiceImpl_1 = __importDefault(require("./service/impl/WeatherPredictServiceImpl"));
+const Scripts_1 = require("./scripts/Scripts");
 const fs_1 = __importDefault(require("fs"));
 const google_tts_api_1 = require("google-tts-api");
 const child_process_1 = require("child_process");
@@ -19,7 +19,7 @@ const NoDataError_1 = __importDefault(require("./model/NoDataError"));
  * @date 2021-05-10
  */
 (async () => {
-    connect_1.connection();
+    Connection_1.connection();
     const weatherPredictService = new WeatherPredictServiceImpl_1.default(new WeatherPredictDao_1.default());
     const airQualityService = new AirQualityServiceImpl_1.default(new AirQualityDao_1.default());
     let airQualityPo;
@@ -40,7 +40,7 @@ const NoDataError_1 = __importDefault(require("./model/NoDataError"));
         }
     }
     finally {
-        connect_1.disconnection();
+        Connection_1.disconnection();
     }
     if (script !== undefined) {
         const fileName = `${__dirname}/morning_call.mp3`;
@@ -56,10 +56,10 @@ const NoDataError_1 = __importDefault(require("./model/NoDataError"));
  */
 function generateScript(entity) {
     if (entity.type === 'AirQuality') {
-        return scripts_1.airQualityReportScript((entity));
+        return Scripts_1.airQualityReportScript((entity));
     }
     else if (entity.type === 'WeatherPredict') {
-        return scripts_1.weatherPredictReportScript((entity));
+        return Scripts_1.weatherPredictReportScript((entity));
     }
 }
 /**
@@ -89,4 +89,4 @@ function executeCommands(fileName) {
         console.log(`deleted file ${fileName}`);
     });
 }
-//# sourceMappingURL=playDailyReport.js.map
+//# sourceMappingURL=PlayDailyReport.js.map

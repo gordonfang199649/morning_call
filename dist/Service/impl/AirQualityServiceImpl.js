@@ -24,10 +24,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
-const api_1 = require("../../api/api");
-const AirQualityIndex_1 = __importDefault(require("../../Enum/AirQualityIndex"));
+const Api_1 = require("../../api/Api");
+const AirQualityIndex_1 = __importDefault(require("../../enum/AirQualityIndex"));
 const AirQualityModel_1 = __importDefault(require("../../model/AirQualityModel"));
-const scripts_1 = require("../../scripts/scripts");
+const Scripts_1 = require("../../scripts/Scripts");
 /**
  * AirQualityServiceImpl 空氣品質實作服務
  * @author Gordon Fang
@@ -45,7 +45,7 @@ class AirQualityServiceImpl {
      * @override
      */
     async saveMonitoringData() {
-        const airQualityData = await api_1.getAirQualityData(0, 6);
+        const airQualityData = await Api_1.getAirQualityData(0, 6);
         airQualityData.suggestion = this.getSuggestion(airQualityData.concentration);
         const airQualityPo = new AirQualityModel_1.default(airQualityData);
         await this.airQualityDao.saveMonitoringData(airQualityPo);
@@ -77,7 +77,7 @@ class AirQualityServiceImpl {
     async fetchMonitoringData() {
         const airQualityPo = await this.airQualityDao.fetechLatestData();
         if (airQualityPo === null) {
-            return Promise.reject(scripts_1.noDataFoundScript('airQuality'));
+            return Promise.reject(Scripts_1.noDataFoundScript('airQuality'));
         }
         return airQualityPo;
     }

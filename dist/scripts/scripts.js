@@ -62,4 +62,4 @@ exports.weatherPredictReportScript = weatherPredictReportScript;
  */
 const noDataFoundScript = (type) => `很抱歉，資料庫目前尚無${type == 'airQuality' ? '空氣' : '天氣預測'}監測數據，請重新撈取資料，謝謝。`;
 exports.noDataFoundScript = noDataFoundScript;
-//# sourceMappingURL=scripts.js.map
+//# sourceMappingURL=Scripts.js.map

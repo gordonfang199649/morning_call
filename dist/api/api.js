@@ -27,7 +27,7 @@ const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const axios_1 = __importDefault(require("axios"));
 const dayjs_1 = __importDefault(require("dayjs"));
-const MonitoringItem_1 = __importDefault(require("../Enum/MonitoringItem"));
+const MonitoringItem_1 = __importDefault(require("../enum/MonitoringItem"));
 const airQualityRequest = axios_1.default.create({
     baseURL: "https://data.epa.gov.tw/api/v1/",
 });
@@ -75,4 +75,4 @@ const getWeatherPredictData = (countryCode, locationName, startTime, endTime) =>
     });
 });
 exports.getWeatherPredictData = getWeatherPredictData;
-//# sourceMappingURL=api.js.map
+//# sourceMappingURL=Api.js.map

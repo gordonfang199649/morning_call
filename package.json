@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "ts-node ./src/playDailyReport.ts",
-    "fetch": "ts-node ./src/fetchMonitoringData.ts",
-    "delete": "ts-node ./src/deleteMonitoringData.ts"
+    "start": "ts-node ./src/PlayDailyReport.ts",
+    "fetch": "ts-node ./src/FetchMonitoringData.ts",
+    "delete": "ts-node ./src/DeleteMonitoringData.ts"
   },
   "dependencies": {
     "dayjs": "^1.10.4",

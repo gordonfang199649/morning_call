@@ -25,10 +25,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const dayjs_1 = __importDefault(require("dayjs"));
-const api_1 = require("../../api/api");
+const Api_1 = require("../../api/Api");
 const WeatherPridictModel_1 = __importDefault(require("../../model/WeatherPridictModel"));
 const NoDataError_1 = __importDefault(require("../../model/NoDataError"));
-const scripts_1 = require("../../scripts/scripts");
+const Scripts_1 = require("../../scripts/Scripts");
 /**
  * WeatherPredictServiceImpl 天氣預報實作服務
  * @author Gordon Fang
@@ -54,7 +54,7 @@ class WeatherPredictServiceImpl {
             startTime = startTime.add(1, 'day');
             endTime = endTime.add(1, 'day');
         }
-        const weatherPredict = await api_1.getWeatherPredictData(process.env.CWB_API_ID, process.env.LOCATION_NAME, this.formatDateTime(startTime), this.formatDateTime(endTime));
+        const weatherPredict = await Api_1.getWeatherPredictData(process.env.CWB_API_ID, process.env.LOCATION_NAME, this.formatDateTime(startTime), this.formatDateTime(endTime));
         const weatherPredictPo = new WeatherPridictModel_1.default(weatherPredict);
         await this.weatherPredictDao.saveMonitoringData(weatherPredictPo);
     }
@@ -72,7 +72,7 @@ class WeatherPredictServiceImpl {
     async fetchMonitoringData() {
         const weatherPredictPo = await this.weatherPredictDao.fetechLatestData();
         if (weatherPredictPo === null) {
-            return Promise.reject(new NoDataError_1.default(scripts_1.noDataFoundScript('weatherPredict')));
+            return Promise.reject(new NoDataError_1.default(Scripts_1.noDataFoundScript('weatherPredict')));
         }
         return weatherPredictPo;
     }
