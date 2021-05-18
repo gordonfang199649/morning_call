@@ -4,6 +4,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import { AirQuality } from "../model/AirQualityModel";
 import { WeatherPredict } from "../model/WeatherPridictModel";
+import MonitoringItem from "../Enum/MonitoringItem";
 
 const airQualityRequest = axios.create({
   baseURL: "https://data.epa.gov.tw/api/v1/",
@@ -23,7 +24,7 @@ export const getAirQualityData = (offset: number, limit: number): Promise<AirQua
   airQualityRequest.get(
     `${process.env.EPA_API_ID}?offset=${offset}&limit=${limit}&api_key=${process.env.EPA_AUTH_KEY}`
   ).then((res: any) => {
-    const data = res.data.records[0];
+    const data: any = res.data.records.find((record: any) => record.ItemName == MonitoringItem.PM2PT5);
     return Promise.resolve(<AirQuality>
       {
         siteId: Number.parseInt(data.SiteId),

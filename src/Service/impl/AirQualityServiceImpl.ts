@@ -28,7 +28,7 @@ export default class AirQualityServiceImpl implements AirQualityService {
    * @override
    */
   public async saveMonitoringData(): Promise<void> {
-    const airQualityData: AirQuality = await getAirQualityData(3, 1);
+    const airQualityData: AirQuality = await getAirQualityData(0, 6);
     airQualityData.suggestion = this.getSuggestion(airQualityData.concentration);
     const airQualityPo: AirQualityDoc = new AirQualityModel(airQualityData);
     await this.airQualityDao.saveMonitoringData(airQualityPo);
