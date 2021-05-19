@@ -51,7 +51,7 @@ export default class WeatherPredictServiceImpl implements WeatherPredictService 
      * @returns 格式化日期時間
      */
     private formatDateTime(dateTime: Dayjs) {
-        return dateTime.format('YYYY-MM-DDTHH:mm:ss')
+        return dateTime.format('YYYY-MM-DDTHH:mm:ss');
     }
 
     /**

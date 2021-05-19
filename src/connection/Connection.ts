@@ -12,11 +12,11 @@ export const connection = async () => {
   } catch (error) {
     console.error(error);
     await disconnect();
-    console.log('disconnected with mongodb.')
+    console.log('disconnected with mongodb.');
   }
 };
 
 export const disconnection = async () => {
   await disconnect();
-  console.log('disconnected with mongodb.')
+  console.log('disconnected with mongodb.');
 }

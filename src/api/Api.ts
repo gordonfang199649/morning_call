@@ -36,7 +36,7 @@ export const getAirQualityData = (offset: number, limit: number): Promise<AirQua
         concentration: Number.parseInt(data.Concentration),
         suggestion: '',
         createDate: dayjs().toDate(),
-      })
+      });
   });
 
 /**
