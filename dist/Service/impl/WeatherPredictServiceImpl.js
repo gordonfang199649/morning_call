@@ -30,14 +30,14 @@ const WeatherPridictModel_1 = __importDefault(require("../../model/WeatherPridic
 const NoDataError_1 = __importDefault(require("../../model/NoDataError"));
 const Scripts_1 = require("../../scripts/Scripts");
 /**
- * WeatherPredictServiceImpl 天氣預報實作服務
+ * WeatherPredictServiceImpl 天氣預測實作服務
  * @author Gordon Fang
  * @date 2021-05-10
  */
 class WeatherPredictServiceImpl {
     /**
-     * 建構子
-     * @param WeatherPredictDao 天氣預報實體持久層
+     * 建構子-依賴注入
+     * @param WeatherPredictDao 天氣預測實體持久層
      */
     constructor(weatherPredictDao) {
         this.weatherPredictDao = weatherPredictDao;

@@ -35,7 +35,7 @@ const Scripts_1 = require("../../scripts/Scripts");
  */
 class AirQualityServiceImpl {
     /**
-     * 建構子
+     * 建構子-依賴注入
      * @param AirQualityDao 空氣品質實體持久層
      */
     constructor(airQualityDao) {
