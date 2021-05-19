@@ -9,7 +9,7 @@ import NoDataError from "../../model/NoDataError";
 import { noDataFoundScript } from "../../scripts/Scripts";
 
 /**
- * WeatherPredictServiceImpl 天氣預報實作服務
+ * WeatherPredictServiceImpl 天氣預測實作服務
  * @author Gordon Fang
  * @date 2021-05-10
  */
@@ -18,8 +18,8 @@ export default class WeatherPredictServiceImpl implements WeatherPredictService 
     private weatherPredictDao: WeatherPredictDao;
 
     /**
-     * 建構子
-     * @param WeatherPredictDao 天氣預報實體持久層
+     * 建構子-依賴注入
+     * @param WeatherPredictDao 天氣預測實體持久層
      */
     constructor(weatherPredictDao: WeatherPredictDao) {
         this.weatherPredictDao = weatherPredictDao;

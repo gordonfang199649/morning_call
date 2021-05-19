@@ -17,7 +17,7 @@ export default class AirQualityServiceImpl implements AirQualityService {
   private airQualityDao: AirQualityDao;
 
   /**
-   * 建構子
+   * 建構子-依賴注入
    * @param AirQualityDao 空氣品質實體持久層
    */
   constructor(airQualityDao: AirQualityDao) {
