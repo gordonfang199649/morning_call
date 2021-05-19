@@ -42,7 +42,7 @@ export default class MonitoringDataController {
      * @returns
      */
     public async dispatch(args: Array<string>): Promise<void> {
-        if (args !== null && args.length > 3) {
+        if (args !== null && args.length > 2) {
             if (Reflect.ownKeys(Object.getPrototypeOf(this)).find((method) => method === args[2])) {
                 await this[args[2]]();
             }
