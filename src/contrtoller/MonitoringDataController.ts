@@ -35,17 +35,19 @@ export default class MonitoringDataController {
         this.airQualityService = airQualityService;
     }
 
-
     /**
      * 分派呼叫對應方法
      * @param args 參數
      * @returns
      */
     public async dispatch(args: Array<string>): Promise<void> {
-        if (args !== null && args.length > 2) {
-            if (Reflect.ownKeys(Object.getPrototypeOf(this)).find((method) => method === args[2])) {
-                await this[args[2]]();
+        const controllerProxy = new Proxy(this, {
+            get: (target: MonitoringDataController, prop: string): boolean => {
+                return Reflect.get(target, prop);
             }
+        });
+        if (args[2] !== undefined && args[2] in controllerProxy) {
+            await controllerProxy[args[2]]();
         }
     }
 
