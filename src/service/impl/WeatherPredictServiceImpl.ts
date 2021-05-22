@@ -29,28 +29,24 @@ export default class WeatherPredictServiceImpl implements WeatherPredictService 
      * @override
      */
     public async saveMonitoringData(): Promise<any> {
-        let startTime: Dayjs = dayjs().set('hour', Number.parseInt(process.env.START_HOUR)).set('minute', 0).set('second', 0);
-        let endTime: Dayjs = dayjs().set('hour', Number.parseInt(process.env.END_HOUR)).set('minute', 0).set('second', 0);
-
-        // 欲撈取資料起始時間點在排程觸發時間點前，將起始、結束時間各加一天
-        // 因OPEN API只保留「未來」天氣預測資料
-        if (startTime.isBefore(dayjs())) {
-            startTime = startTime.add(1, 'day')
-            endTime = endTime.add(1, 'day')
-        }
-
         const weatherPredict: WeatherPredict = await getWeatherPredictData(process.env.CWB_API_ID, process.env.LOCATION_NAME
-            , this.formatDateTime(startTime), this.formatDateTime(endTime));
+            , this.formatDateTime(process.env.START_HOUR), this.formatDateTime(process.env.END_HOUR));
         const weatherPredictPo: WeatherPredictDoc = new WeatherPridictModel(weatherPredict);
         await this.weatherPredictDao.saveMonitoringData(weatherPredictPo);
     }
 
     /**
      * 格式化日期時間為YYYY-MM-DDTHH:mm:ss日期格式
-     * @param dateTime 日期時間
+     * @param hour 小時
      * @returns 格式化日期時間
      */
-    private formatDateTime(dateTime: Dayjs) {
+    private formatDateTime(hour: string) {
+        let dateTime: Dayjs = dayjs().set('hour', Number.parseInt(hour)).set('minute', 0).set('second', 0);
+        // 欲撈取資料起始時間點在排程觸發時間點前，將起始、結束時間各加一天
+        // 因OPEN API只保留「未來」天氣預測資料
+        if (dateTime.isBefore(dayjs())) {
+            dateTime = dateTime.add(1, 'day');
+        }
         return dateTime.format('YYYY-MM-DDTHH:mm:ss');
     }
 
