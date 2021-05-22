@@ -1,5 +1,6 @@
 import { connection, disconnection } from './connection/Connection'
 import MonitoringDataController from './contrtoller/MonitoringDataController';
+import { log } from './log/log';
 import AirQualityDao from './repository/AirQualityDao';
 import WeatherPredictDao from "./repository/WeatherPredictDao";
 import AirQualityServiceImpl from './service/impl/AirQualityServiceImpl';
@@ -11,6 +12,8 @@ import WeatherPredictServiceImpl from "./service/impl/WeatherPredictServiceImpl"
  * @date 2021-05-19
  */
 (async (): Promise<void> => {
+    const logger = log("Main");
+    logger.info('Application started.');
     await connection();
     const monitoringDataController: MonitoringDataController = new MonitoringDataController(
         new WeatherPredictServiceImpl(new WeatherPredictDao()),
@@ -22,6 +25,7 @@ import WeatherPredictServiceImpl from "./service/impl/WeatherPredictServiceImpl"
         console.error(err);
     }
     finally {
-        disconnection();
+        await disconnection();
     };
+    logger.info('Application terminated.');
 })();

@@ -13,6 +13,7 @@ import WeatherPredictServiceImpl from "../service/impl/WeatherPredictServiceImpl
 import MonitoringService from "../service/MonitoringService";
 import fs from 'fs';
 import NoDataError from "../model/NoDataError";
+import { log } from "../log/log";
 
 /**
  * MonitoringDataController 監測環境數據控制器
@@ -24,6 +25,8 @@ export default class MonitoringDataController {
     private weatherPredictService: MonitoringService;
     /** airQualityService 空氣品質服務 */
     private airQualityService: MonitoringService;
+    /** looger */
+    private logger = log(this.constructor.name);
 
     /**
      * 建構子-依賴注入
@@ -43,6 +46,7 @@ export default class MonitoringDataController {
     public async dispatch(args: Array<string>): Promise<void> {
         const controllerProxy = new Proxy(this, {
             get: (target: MonitoringDataController, prop: string): boolean => {
+                this.logger.debug(`now calling ${prop}`);
                 return Reflect.get(target, prop);
             }
         });
@@ -70,7 +74,7 @@ export default class MonitoringDataController {
             if (err instanceof NoDataError) {
                 script = err.message;
             } else {
-                console.error(err);
+                this.logger.error(err);
             }
         }
 
@@ -107,7 +111,7 @@ export default class MonitoringDataController {
         const base64Audio: string = rawAudio.map((raw) => { return raw.base64 }).join('');
         const audioBuffer = Buffer.from(base64Audio, 'base64');
         fs.writeFileSync(`${fileName}`, audioBuffer);
-        console.log(`generated audio file: ${fileName}`);
+        this.logger.info(`generated audio file: ${fileName}`);
     }
 
     /**
@@ -117,10 +121,12 @@ export default class MonitoringDataController {
      */
     private executeCommands(fileName: string): void {
         execSync(`mpg123 ${fileName}`);
-        console.log(`finised playing file ${fileName}`);
+        this.logger.info(`finised playing file ${fileName}`);
         exec(`rm ${fileName}`, (err, stdout, stderr) => {
-            if (err) console.error(err);
-            console.log(`deleted file ${fileName}`);
+            if (err) {
+                this.logger.error(err);
+            }
+            this.logger.info(`deleted file ${fileName}`);
         });
     }
 

@@ -1,3 +1,4 @@
+import { log } from "../log/log";
 import AirQualityModel, { AirQuality, AirQualityDoc } from "../model/AirQualityModel";
 
 /**
@@ -6,17 +7,16 @@ import AirQualityModel, { AirQuality, AirQualityDoc } from "../model/AirQualityM
  * @date 2021-05-10
  */
 export default class AirQualityDao {
+  /**logger */
+  private logger = log(this.constructor.name);
   /**
    * 監測數據儲存至資料庫
    * @param airQualityPo 空氣品質實體 Document
    * @returns
    */
   public async saveMonitoringData(airQualityPo: AirQualityDoc): Promise<void> {
-    try {
-      await airQualityPo.save();
-    } catch (err) {
-      console.error(err);
-    }
+    await airQualityPo.save();
+    this.logger.debug('inserted one row.');
   }
 
   /**
@@ -27,6 +27,7 @@ export default class AirQualityDao {
   public async fetechLatestData(): Promise<AirQuality> {
     let airQualityPo: AirQuality;
     airQualityPo = await AirQualityModel.findOne().sort({ '_id': 'desc' }).exec();
+    this.logger.debug('selected one row.', airQualityPo);
     return airQualityPo;
   }
 
@@ -50,6 +51,6 @@ export default class AirQualityDao {
       }
     }).exec();
 
-    console.log(`deleted ${rowNumber} rows`);
+    this.logger.debug(`deleted ${rowNumber} row(s).`);
   }
 }

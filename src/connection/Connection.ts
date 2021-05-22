@@ -1,22 +1,23 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 import { connect, disconnect } from "mongoose";
+import { log } from "../log/log";
 
+const logger = log('Connection');
 export const connection = async () => {
   try {
     await connect(process.env.DB_SERVER, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    console.log('successfully connected with mongodb');
+    logger.info('successfully connected with mongodb.');
   } catch (error) {
-    console.error(error);
     await disconnect();
-    console.log('disconnected with mongodb.');
+    logger.error('disconnected with mongodb.', error);
   }
 };
 
 export const disconnection = async () => {
   await disconnect();
-  console.log('disconnected with mongodb.');
+  logger.info('disconnected with mongodb.');
 }
