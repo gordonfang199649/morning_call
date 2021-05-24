@@ -82,7 +82,7 @@ export default class MonitoringDataController {
         if (script !== undefined) {
             const fileName: string = `${__dirname}/morning_call.mp3`;
             await this.generateAudioFile(script, fileName);
-            this.executeCommands(fileName);
+            this.outputAudioToSpeaker(fileName);
         }
     }
 
@@ -120,7 +120,7 @@ export default class MonitoringDataController {
      * @param fileName 檔案名
      * @returns
      */
-    private executeCommands(fileName: string): void {
+    private outputAudioToSpeaker(fileName: string): void {
         fs.createReadStream(fileName)
             .pipe(new lame.Decoder())
             .pipe(new Speaker());
