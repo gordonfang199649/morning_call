@@ -1,0 +1,6 @@
+#environment variables
+.env
+#compiled javascript folder
+/dist
+#node modules
+/node_modules
