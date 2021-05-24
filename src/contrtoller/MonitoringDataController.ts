@@ -1,4 +1,3 @@
-import { execSync, exec } from "child_process";
 import dayjs from "dayjs";
 import { getAllAudioBase64 } from "google-tts-api";
 import { AirQuality } from "../model/AirQualityModel";
@@ -14,6 +13,8 @@ import MonitoringService from "../service/MonitoringService";
 import fs from 'fs';
 import NoDataError from "../model/NoDataError";
 import { log } from "../log/log";
+import Speaker from "speaker";
+import lame from 'lame';
 
 /**
  * MonitoringDataController 監測環境數據控制器
@@ -108,26 +109,21 @@ export default class MonitoringDataController {
      */
     private async generateAudioFile(script: string, fileName: string): Promise<void> {
         const rawAudio: Array<AudioText> = await getAllAudioBase64(script, { lang: 'zh-TW' });
-        const base64Audio: string = rawAudio.map((raw) => { return raw.base64 }).join('');
+        const base64Audio: string = rawAudio.map((raw) => { return raw.base64 }).join();
         const audioBuffer = Buffer.from(base64Audio, 'base64');
-        fs.writeFileSync(`${fileName}`, audioBuffer);
+        fs.createWriteStream(fileName).write(audioBuffer, "base64");
         this.logger.info(`generated audio file: ${fileName}`);
     }
 
     /**
-     * 執行播放語音檔與刪檔命令
+     * 執行播放語音檔
      * @param fileName 檔案名
      * @returns
      */
     private executeCommands(fileName: string): void {
-        execSync(`mpg123 ${fileName}`);
-        this.logger.info(`finised playing file ${fileName}`);
-        exec(`rm ${fileName}`, (err, stdout, stderr) => {
-            if (err) {
-                this.logger.error(err);
-            }
-            this.logger.info(`deleted file ${fileName}`);
-        });
+        fs.createReadStream(fileName)
+            .pipe(new lame.Decoder())
+            .pipe(new Speaker());
     }
 
     /**

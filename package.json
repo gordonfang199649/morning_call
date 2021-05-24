@@ -11,6 +11,7 @@
     "dayjs": "^1.10.4",
     "dotenv": "^8.2.0",
     "google-tts-api": "^2.0.2",
+    "lame": "^1.2.4",
     "log4js": "^6.3.0",
     "mongoose": "^5.12.7",
     "speaker": "^0.5.3",
