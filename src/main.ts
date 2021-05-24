@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+import path from 'path';
 import { connection, disconnection } from './connection/Connection'
 import MonitoringDataController from './contrtoller/MonitoringDataController';
 import { log } from './log/log';
@@ -5,6 +7,7 @@ import AirQualityDao from './repository/AirQualityDao';
 import WeatherPredictDao from "./repository/WeatherPredictDao";
 import AirQualityServiceImpl from './service/impl/AirQualityServiceImpl';
 import WeatherPredictServiceImpl from "./service/impl/WeatherPredictServiceImpl";
+dotenv.config({ path: path.resolve(`./${process.env.NODE_ENV}.env`) });
 
 /**
  * 程式入口點

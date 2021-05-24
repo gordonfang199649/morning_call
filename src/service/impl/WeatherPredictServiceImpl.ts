@@ -1,5 +1,3 @@
-import * as dotenv from "dotenv";
-dotenv.config();
 import dayjs, { Dayjs } from "dayjs";
 import { getWeatherPredictData } from "../../api/Api";
 import WeatherPridictModel, { WeatherPredict, WeatherPredictDoc } from "../../model/WeatherPridictModel";

@@ -1,5 +1,3 @@
-import * as dotenv from "dotenv";
-dotenv.config();
 import { getAirQualityData } from "../../api/Api";
 import AirQualityIndex from "../../enum/AirQualityIndex";
 import AirQualityModel, { AirQuality, AirQualityDoc } from "../../model/AirQualityModel";

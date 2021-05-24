@@ -1,5 +1,3 @@
-import * as dotenv from "dotenv";
-dotenv.config();
 import { connect, disconnect } from "mongoose";
 import { log } from "../log/log";
 

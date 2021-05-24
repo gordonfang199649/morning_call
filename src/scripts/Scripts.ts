@@ -1,8 +1,6 @@
 import dayjs from "dayjs";
-import * as dotenv from "dotenv";
 import { AirQuality } from "../model/AirQualityModel";
 import { WeatherPredict } from "../model/WeatherPridictModel";
-dotenv.config();
 
 /**
  * 產生空氣品質播報腳本
