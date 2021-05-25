@@ -62,15 +62,15 @@ export default class MonitoringDataController {
      * @returns
      */
     private async playDailyReport(): Promise<void> {
-        let airQualityPo: Entity;
-        let weatherPredictPo: Entity;
+        let airQualityRelayBo: Entity;
+        let weatherPredictRelayBo: Entity;
         let script: string;
 
         try {
             await this.airQualityService.saveMonitoringData();
-            airQualityPo = await this.airQualityService.fetchMonitoringData();
-            weatherPredictPo = await this.weatherPredictService.fetchMonitoringData();
-            script = this.generateScript(Array<Entity>(airQualityPo, weatherPredictPo));
+            airQualityRelayBo = await this.airQualityService.fetchMonitoringData();
+            weatherPredictRelayBo = await this.weatherPredictService.fetchMonitoringData();
+            script = this.generateScript(Array<Entity>(airQualityRelayBo, weatherPredictRelayBo));
         } catch (err) {
             if (err instanceof NoDataError) {
                 script = err.message;
