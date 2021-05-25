@@ -4,3 +4,7 @@
 /dist
 #node modules
 /node_modules
+#log
+src/log/log.txt
+#mp3 file
+src/contrtoller/morning_call.mp3

@@ -1,9 +1,13 @@
 import dayjs from "dayjs";
 import { getAirQualityData } from "../../api/Api";
 import AirQualityIndex from "../../enum/AirQualityIndex";
+import AirQualityDto from "../../model/AirQualityDto";
 import AirQualityModel, { AirQuality, AirQualityDoc } from "../../model/AirQualityModel";
+import AirQualityRelayBo from "../../model/AirQualityRelayBo";
+import AirQualityRelayDto from "../../model/AirQualityRelayDto";
 import AirQualityDao from "../../repository/AirQualityDao";
 import { noDataFoundScript } from "../../scripts/Scripts";
+import Utility from "../../utility/Utility";
 import AirQualityService from "../AirQualityService";
 
 /**
@@ -29,8 +33,8 @@ export default class AirQualityServiceImpl implements AirQualityService {
   public async saveMonitoringData(): Promise<void> {
     const airQualityData: AirQuality = await getAirQualityData(0, 6);
     airQualityData.suggestion = this.getSuggestion(airQualityData.concentration);
-    const airQualityPo: AirQualityDoc = new AirQualityModel(airQualityData);
-    await this.airQualityDao.saveMonitoringData(airQualityPo);
+    const airQualityDoc: AirQualityDoc = new AirQualityModel(airQualityData);
+    await this.airQualityDao.saveMonitoringData(airQualityDoc);
   }
 
   /**
@@ -58,20 +62,23 @@ export default class AirQualityServiceImpl implements AirQualityService {
   /**
    * @override
    */
-  public async fetchMonitoringData(): Promise<AirQuality> {
-    const airQualityPo: AirQuality = await this.airQualityDao.fetechLatestData();
-    if (airQualityPo === null) {
+  public async fetchMonitoringData(): Promise<AirQualityRelayBo> {
+    const airQualityRelayDto: AirQualityRelayDto = await this.airQualityDao.fetechLatestData();
+    if (airQualityRelayDto === null) {
       return Promise.reject(noDataFoundScript('airQuality'));
     }
-    return airQualityPo;
+    const airQualityRelayBo: AirQualityRelayBo = new AirQualityRelayBo();
+    Utility.copyObject(airQualityRelayBo, airQualityRelayDto)
+    return airQualityRelayBo;
   }
 
   /**
    * @override
    */
   public async deleteMonitoringData(): Promise<void> {
-    const startDate: Date = dayjs().add(Number.parseInt(process.env.RESERVE_DAYS), 'd').toDate();
-    const endDate: Date = dayjs().toDate();
-    await this.airQualityDao.deleteDataByDuration(startDate, endDate);
+    const airQualityDto: AirQualityDto = new AirQualityDto();
+    airQualityDto.startDate = dayjs().add(Number.parseInt(process.env.RESERVE_DAYS), 'd').toDate();
+    airQualityDto.endDate = dayjs().toDate();
+    await this.airQualityDao.deleteDataByDuration(airQualityDto);
   }
 }

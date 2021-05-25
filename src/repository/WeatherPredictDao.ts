@@ -1,5 +1,8 @@
 import { log } from "../log/log";
+import WeatherPredictDto from "../model/WeatherPredictDto";
+import WeatherPredictRelayDto from "../model/WeatherPredictRelayDto";
 import WeatherPridictModel, { WeatherPredict, WeatherPredictDoc } from "../model/WeatherPridictModel";
+import Utility from "../utility/Utility";
 
 /**
  * WeatherPredictDao
@@ -12,11 +15,11 @@ export default class WeatherPredictDao {
 
     /**
      * 監測數據儲存至資料庫
-     * @param weatherPredictPo 天氣預測實體 Document
+     * @param weatherPredictDoc 天氣預測 Document
      * @returns
      */
-    public async saveMonitoringData(weatherPredictPo: WeatherPredictDoc): Promise<void> {
-        await weatherPredictPo.save();
+    public async saveMonitoringData(weatherPredictDoc: WeatherPredictDoc): Promise<void> {
+        await weatherPredictDoc.save();
         this.logger.debug('inserted one row.');
     }
 
@@ -25,11 +28,12 @@ export default class WeatherPredictDao {
      * @param
      * @returns WeatherPredict 天氣預測實體
      */
-    public async fetechLatestData(): Promise<WeatherPredict> {
-        let weatherPredictPo: WeatherPredict;
-        weatherPredictPo = await WeatherPridictModel.findOne().sort({ '_id': 'desc' }).exec();
+    public async fetechLatestData(): Promise<WeatherPredictRelayDto> {
+        const weatherPredictPo: WeatherPredict = await WeatherPridictModel.findOne().sort({ '_id': 'desc' }).exec();
         this.logger.debug('selected one row.', weatherPredictPo);
-        return weatherPredictPo;
+        const weatherPredictRelayDto: WeatherPredictRelayDto = new WeatherPredictRelayDto();
+        Utility.copyObject(weatherPredictRelayDto, weatherPredictPo);
+        return weatherPredictRelayDto;
     }
 
     /**
@@ -37,18 +41,18 @@ export default class WeatherPredictDao {
      * @param startDate 資料區間起始日期
      * @param endDate 資料區間結束日期
      */
-    public async deleteDataByDuration(startDate: Date, endDate: Date): Promise<void> {
+    public async deleteDataByDuration(weatherPredictDto: WeatherPredictDto): Promise<void> {
         const rowNumber = await WeatherPridictModel.countDocuments({
             createDate: {
-                $gte: startDate,
-                $lte: endDate
+                $gte: weatherPredictDto.startDate,
+                $lte: weatherPredictDto.endDate
             }
         }).exec();
 
         await WeatherPridictModel.deleteMany({
             createDate: {
-                $gte: startDate,
-                $lte: endDate
+                $gte: weatherPredictDto.startDate,
+                $lte: weatherPredictDto.endDate
             }
         }).exec();
 

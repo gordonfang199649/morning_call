@@ -5,6 +5,10 @@ import WeatherPredictService from "../WeatherPredictService";
 import WeatherPredictDao from "../../repository/WeatherPredictDao";
 import NoDataError from "../../model/NoDataError";
 import { noDataFoundScript } from "../../scripts/Scripts";
+import WeatherPredictDto from "../../model/WeatherPredictDto";
+import WeatherPredictRelayDto from "../../model/WeatherPredictRelayDto";
+import WeatherPredictRelayBo from "../../model/WeatherPredictRelayBo";
+import Utility from "../../utility/Utility";
 
 /**
  * WeatherPredictServiceImpl 天氣預測實作服務
@@ -29,8 +33,8 @@ export default class WeatherPredictServiceImpl implements WeatherPredictService 
     public async saveMonitoringData(): Promise<any> {
         const weatherPredict: WeatherPredict = await getWeatherPredictData(process.env.CWB_API_ID, process.env.LOCATION_NAME
             , this.formatDateTime(process.env.START_HOUR), this.formatDateTime(process.env.END_HOUR));
-        const weatherPredictPo: WeatherPredictDoc = new WeatherPridictModel(weatherPredict);
-        await this.weatherPredictDao.saveMonitoringData(weatherPredictPo);
+        const weatherPredictDoc: WeatherPredictDoc = new WeatherPridictModel(weatherPredict);
+        await this.weatherPredictDao.saveMonitoringData(weatherPredictDoc);
     }
 
     /**
@@ -51,20 +55,23 @@ export default class WeatherPredictServiceImpl implements WeatherPredictService 
     /**
      * @override
      */
-    public async fetchMonitoringData(): Promise<WeatherPredict> {
-        const weatherPredictPo: WeatherPredict = await this.weatherPredictDao.fetechLatestData();
-        if (weatherPredictPo === null) {
+    public async fetchMonitoringData(): Promise<WeatherPredictRelayBo> {
+        const weatherPredictRelayDto: WeatherPredictRelayDto = await this.weatherPredictDao.fetechLatestData();
+        if (weatherPredictRelayDto === null) {
             return Promise.reject(new NoDataError(noDataFoundScript('weatherPredict')));
         }
-        return weatherPredictPo;
+        const weatherPredictRelayBo: WeatherPredictRelayBo = new WeatherPredictRelayBo();
+        Utility.copyObject(weatherPredictRelayBo, weatherPredictRelayDto);
+        return weatherPredictRelayBo;
     }
 
     /**
      * @override
      */
     public async deleteMonitoringData(): Promise<void> {
-        const startDate: Date = dayjs().add(Number.parseInt(process.env.RESERVE_DAYS), 'd').toDate();
-        const endDate: Date = dayjs().toDate();
-        await this.weatherPredictDao.deleteDataByDuration(startDate, endDate);
+        const weatherPredictDto: WeatherPredictDto = new WeatherPredictDto();
+        weatherPredictDto.startDate = dayjs().add(Number.parseInt(process.env.RESERVE_DAYS), 'd').toDate();
+        weatherPredictDto.endDate = dayjs().toDate();
+        await this.weatherPredictDao.deleteDataByDuration(weatherPredictDto);
     }
 }
