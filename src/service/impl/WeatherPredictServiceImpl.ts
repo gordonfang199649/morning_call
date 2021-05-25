@@ -62,7 +62,9 @@ export default class WeatherPredictServiceImpl implements WeatherPredictService 
     /**
      * @override
      */
-    public async deleteMonitoringData(startDate: Date, endDate: Date): Promise<void> {
+    public async deleteMonitoringData(): Promise<void> {
+        const startDate: Date = dayjs().add(Number.parseInt(process.env.RESERVE_DAYS), 'd').toDate();
+        const endDate: Date = dayjs().toDate();
         await this.weatherPredictDao.deleteDataByDuration(startDate, endDate);
     }
 }

@@ -141,7 +141,7 @@ export default class MonitoringDataController {
       * @returns
       */
     private async deleteMonitoringData(): Promise<void> {
-        await this.weatherPredictService.deleteMonitoringData(dayjs().add(-7, 'd').toDate(), dayjs().toDate());
-        await this.airQualityService.deleteMonitoringData(dayjs().add(-7, 'd').toDate(), dayjs().toDate());
+        await this.weatherPredictService.deleteMonitoringData();
+        await this.airQualityService.deleteMonitoringData();
     }
 }

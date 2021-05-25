@@ -26,5 +26,5 @@ export default interface MonitoringService {
    * @param endDate 結束日期
    * @returns
    */
-  deleteMonitoringData(startDate: Date, endDate: Date): Promise<void>;
+  deleteMonitoringData(): Promise<void>;
 }

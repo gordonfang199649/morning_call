@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { getAirQualityData } from "../../api/Api";
 import AirQualityIndex from "../../enum/AirQualityIndex";
 import AirQualityModel, { AirQuality, AirQualityDoc } from "../../model/AirQualityModel";
@@ -68,7 +69,9 @@ export default class AirQualityServiceImpl implements AirQualityService {
   /**
    * @override
    */
-  public async deleteMonitoringData(startDate: Date, endDate: Date): Promise<void> {
+  public async deleteMonitoringData(): Promise<void> {
+    const startDate: Date = dayjs().add(Number.parseInt(process.env.RESERVE_DAYS), 'd').toDate();
+    const endDate: Date = dayjs().toDate();
     await this.airQualityDao.deleteDataByDuration(startDate, endDate);
   }
 }
