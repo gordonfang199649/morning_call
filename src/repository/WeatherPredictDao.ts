@@ -1,4 +1,4 @@
-import { log } from "../log/log";
+import { log } from "../utility/log/log";
 import WeatherPredictDto from "../model/WeatherPredictDto";
 import WeatherPredictRelayDto from "../model/WeatherPredictRelayDto";
 import WeatherPridictModel, { WeatherPredict, WeatherPredictDoc } from "../model/WeatherPridictModel";

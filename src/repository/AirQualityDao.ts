@@ -1,4 +1,4 @@
-import { log } from "../log/log";
+import { log } from "../utility/log/log";
 import AirQualityDto from "../model/AirQualityDto";
 import AirQualityModel, { AirQuality, AirQualityDoc } from "../model/AirQualityModel";
 import AirQualityRelayDto from "../model/AirQualityRelayDto";

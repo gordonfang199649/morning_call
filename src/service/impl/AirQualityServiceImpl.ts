@@ -1,12 +1,12 @@
 import dayjs from "dayjs";
-import { getAirQualityData } from "../../api/Api";
+import { getAirQualityData } from "../../utility/api/Api";
 import AirQualityIndex from "../../enum/AirQualityIndex";
 import AirQualityDto from "../../model/AirQualityDto";
 import AirQualityModel, { AirQuality, AirQualityDoc } from "../../model/AirQualityModel";
 import AirQualityRelayBo from "../../model/AirQualityRelayBo";
 import AirQualityRelayDto from "../../model/AirQualityRelayDto";
 import AirQualityDao from "../../repository/AirQualityDao";
-import { noDataFoundScript } from "../../scripts/Scripts";
+import { noDataFoundScript } from "../../utility/scripts/Scripts";
 import { copyObject } from "../../utility/Utility";
 import AirQualityService from "../AirQualityService";
 

@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
 import path from 'path';
-import { connection, disconnection } from './connection/Connection'
+import { connection, disconnection } from './utility/connection/Connection'
 import MonitoringDataController from './contrtoller/MonitoringDataController';
-import { log } from './log/log';
+import { log } from './utility/log/log';
 import AirQualityDao from './repository/AirQualityDao';
 import WeatherPredictDao from "./repository/WeatherPredictDao";
 import AirQualityServiceImpl from './service/impl/AirQualityServiceImpl';

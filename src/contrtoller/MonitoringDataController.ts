@@ -6,13 +6,13 @@ import Entity from "../model/Entity";
 import { WeatherPredict } from "../model/WeatherPridictModel";
 import AirQualityDao from "../repository/AirQualityDao";
 import WeatherPredictDao from "../repository/WeatherPredictDao";
-import { airQualityReportScript, weatherPredictReportScript } from "../scripts/Scripts";
+import { airQualityReportScript, weatherPredictReportScript } from "../utility/scripts/Scripts";
 import AirQualityServiceImpl from "../service/impl/AirQualityServiceImpl";
 import WeatherPredictServiceImpl from "../service/impl/WeatherPredictServiceImpl";
 import MonitoringService from "../service/MonitoringService";
 import fs from 'fs';
 import NoDataError from "../model/NoDataError";
-import { log } from "../log/log";
+import { log } from "../utility/log/log";
 import Speaker from "speaker";
 import lame from 'lame';
 

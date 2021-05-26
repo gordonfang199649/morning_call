@@ -1,10 +1,10 @@
 import dayjs, { Dayjs } from "dayjs";
-import { getWeatherPredictData } from "../../api/Api";
+import { getWeatherPredictData } from "../../utility/api/Api";
 import WeatherPridictModel, { WeatherPredict, WeatherPredictDoc } from "../../model/WeatherPridictModel";
 import WeatherPredictService from "../WeatherPredictService";
 import WeatherPredictDao from "../../repository/WeatherPredictDao";
 import NoDataError from "../../model/NoDataError";
-import { noDataFoundScript } from "../../scripts/Scripts";
+import { noDataFoundScript } from "../../utility/scripts/Scripts";
 import WeatherPredictDto from "../../model/WeatherPredictDto";
 import WeatherPredictRelayDto from "../../model/WeatherPredictRelayDto";
 import WeatherPredictRelayBo from "../../model/WeatherPredictRelayBo";

@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
-import { AirQuality } from "../model/AirQualityModel";
-import { WeatherPredict } from "../model/WeatherPridictModel";
+import { AirQuality } from "../../model/AirQualityModel";
+import { WeatherPredict } from "../../model/WeatherPridictModel";
 
 /**
  * 產生空氣品質播報腳本

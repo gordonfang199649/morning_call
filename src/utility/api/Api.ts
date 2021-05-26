@@ -1,8 +1,8 @@
 import axios from "axios";
 import dayjs from "dayjs";
-import { AirQuality } from "../model/AirQualityModel";
-import { WeatherPredict } from "../model/WeatherPridictModel";
-import MonitoringItem from "../enum/MonitoringItem";
+import { AirQuality } from "../../model/AirQualityModel";
+import { WeatherPredict } from "../../model/WeatherPridictModel";
+import MonitoringItem from "../../enum/MonitoringItem";
 
 const airQualityRequest = axios.create({
   baseURL: "https://data.epa.gov.tw/api/v1/",
