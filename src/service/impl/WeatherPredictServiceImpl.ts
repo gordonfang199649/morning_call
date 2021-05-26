@@ -56,10 +56,13 @@ export default class WeatherPredictServiceImpl implements WeatherPredictService 
      * @override
      */
     public async fetchMonitoringData(): Promise<WeatherPredictRelayBo> {
-        const weatherPredictRelayDto: WeatherPredictRelayDto = await this.weatherPredictDao.fetechLatestData();
-        if (weatherPredictRelayDto === null) {
+        //查看過去24小時內有無資料
+        const weatherPredictDto: WeatherPredictDto = this.generateWeatherPredictDto(-1);
+        const dataAmount: number = await this.weatherPredictDao.countDataAmount(weatherPredictDto);
+        if (dataAmount === 0) {
             return Promise.reject(new NoDataError(noDataFoundScript('weatherPredict')));
         }
+        const weatherPredictRelayDto: WeatherPredictRelayDto = await this.weatherPredictDao.fetechLatestData();
         const weatherPredictRelayBo: WeatherPredictRelayBo = new WeatherPredictRelayBo();
         copyObject(weatherPredictRelayBo, weatherPredictRelayDto);
         return weatherPredictRelayBo;
@@ -69,9 +72,18 @@ export default class WeatherPredictServiceImpl implements WeatherPredictService 
      * @override
      */
     public async deleteMonitoringData(): Promise<void> {
-        const weatherPredictDto: WeatherPredictDto = new WeatherPredictDto();
-        weatherPredictDto.startDate = dayjs().add(Number.parseInt(process.env.RESERVE_DAYS), 'd').toDate();
-        weatherPredictDto.endDate = dayjs().toDate();
+        const weatherPredictDto: WeatherPredictDto = this.generateWeatherPredictDto(Number.parseInt(process.env.RESERVE_DAYS));
         await this.weatherPredictDao.deleteDataByDuration(weatherPredictDto);
+    }
+
+    /**
+     * 
+     * @param days 
+     */
+    private generateWeatherPredictDto(days: number): WeatherPredictDto {
+        const weatherPredictDto: WeatherPredictDto = new WeatherPredictDto();
+        weatherPredictDto.startDate = dayjs().add(days, 'd').toDate();
+        weatherPredictDto.endDate = dayjs().toDate();
+        return weatherPredictDto;
     }
 }

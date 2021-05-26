@@ -42,13 +42,7 @@ export default class WeatherPredictDao {
      * @param endDate 資料區間結束日期
      */
     public async deleteDataByDuration(weatherPredictDto: WeatherPredictDto): Promise<void> {
-        const rowNumber = await WeatherPridictModel.countDocuments({
-            createDate: {
-                $gte: weatherPredictDto.startDate,
-                $lte: weatherPredictDto.endDate
-            }
-        }).exec();
-
+        const rowNumber: number = await this.countDataAmount(weatherPredictDto);
         await WeatherPridictModel.deleteMany({
             createDate: {
                 $gte: weatherPredictDto.startDate,
@@ -57,5 +51,20 @@ export default class WeatherPredictDao {
         }).exec();
 
         this.logger.debug(`deleted ${rowNumber} row(s).`);
+    }
+
+    /**
+    * 計算日期區間內資料數
+    * @param weatherPredictDto
+    * @returns 資料數
+    */
+    public async countDataAmount(weatherPredictDto: WeatherPredictDto): Promise<number> {
+        const rowNumber: number = await WeatherPridictModel.countDocuments({
+            createDate: {
+                $gte: weatherPredictDto.startDate,
+                $lte: weatherPredictDto.endDate
+            }
+        }).exec();
+        return rowNumber;
     }
 }
