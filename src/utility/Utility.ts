@@ -5,8 +5,10 @@ export default class Utility {
      * @param source 來源物件
      */
     public static copyObject(target: object, source: object) {
-        Object.keys(target).forEach(key => {
-            target[key] = source[key]
-        })
+        Object.keys(source).forEach(key => {
+            if(key in target){
+                target[key] = source[key]
+            }
+        });
     }
 }
