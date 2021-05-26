@@ -2,7 +2,7 @@ import { log } from "../log/log";
 import WeatherPredictDto from "../model/WeatherPredictDto";
 import WeatherPredictRelayDto from "../model/WeatherPredictRelayDto";
 import WeatherPridictModel, { WeatherPredict, WeatherPredictDoc } from "../model/WeatherPridictModel";
-import Utility from "../utility/Utility";
+import { copyObject } from "../utility/Utility";
 
 /**
  * WeatherPredictDao
@@ -29,10 +29,10 @@ export default class WeatherPredictDao {
      * @returns WeatherPredict 天氣預測實體
      */
     public async fetechLatestData(): Promise<WeatherPredictRelayDto> {
-        const weatherPredictPo: WeatherPredict = await WeatherPridictModel.findOne().sort({ '_id': 'desc' }).exec();
+        const weatherPredictPo: WeatherPredict = (await WeatherPridictModel.findOne().sort({ '_id': 'desc' }).exec()).toObject({ getters: true });
         this.logger.debug('selected one row.', weatherPredictPo);
         const weatherPredictRelayDto: WeatherPredictRelayDto = new WeatherPredictRelayDto();
-        Utility.copyObject(weatherPredictRelayDto, weatherPredictPo);
+        copyObject(weatherPredictRelayDto, weatherPredictPo);
         return weatherPredictRelayDto;
     }
 

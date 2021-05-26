@@ -2,7 +2,7 @@ import { log } from "../log/log";
 import AirQualityDto from "../model/AirQualityDto";
 import AirQualityModel, { AirQuality, AirQualityDoc } from "../model/AirQualityModel";
 import AirQualityRelayDto from "../model/AirQualityRelayDto";
-import Utility from "../utility/Utility";
+import { copyObject } from "../utility/Utility";
 
 /**
  * AirQualityDao 空氣品質實體持久層
@@ -28,10 +28,10 @@ export default class AirQualityDao {
    * @returns AirQuality 空氣品質實體
    */
   public async fetechLatestData(): Promise<AirQualityRelayDto> {
-    const airQualityPo: AirQuality = await AirQualityModel.findOne().sort({ '_id': 'desc' }).exec();
+    const airQualityPo: AirQuality = (await AirQualityModel.findOne().sort({ '_id': 'desc' }).exec()).toObject({ getters: true });
     this.logger.debug('selected one row.', airQualityPo);
     const airQualityRelayDto: AirQualityRelayDto = new AirQualityRelayDto();
-    Utility.copyObject(airQualityRelayDto, airQualityPo);
+    copyObject(airQualityRelayDto, airQualityPo);
     return airQualityRelayDto;
   }
 

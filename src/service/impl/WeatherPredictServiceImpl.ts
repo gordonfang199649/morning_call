@@ -8,7 +8,7 @@ import { noDataFoundScript } from "../../scripts/Scripts";
 import WeatherPredictDto from "../../model/WeatherPredictDto";
 import WeatherPredictRelayDto from "../../model/WeatherPredictRelayDto";
 import WeatherPredictRelayBo from "../../model/WeatherPredictRelayBo";
-import Utility from "../../utility/Utility";
+import { copyObject } from "../../utility/Utility";
 
 /**
  * WeatherPredictServiceImpl 天氣預測實作服務
@@ -61,7 +61,7 @@ export default class WeatherPredictServiceImpl implements WeatherPredictService 
             return Promise.reject(new NoDataError(noDataFoundScript('weatherPredict')));
         }
         const weatherPredictRelayBo: WeatherPredictRelayBo = new WeatherPredictRelayBo();
-        Utility.copyObject(weatherPredictRelayBo, weatherPredictRelayDto);
+        copyObject(weatherPredictRelayBo, weatherPredictRelayDto);
         return weatherPredictRelayBo;
     }
 

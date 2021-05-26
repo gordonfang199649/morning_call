@@ -7,7 +7,7 @@ import AirQualityRelayBo from "../../model/AirQualityRelayBo";
 import AirQualityRelayDto from "../../model/AirQualityRelayDto";
 import AirQualityDao from "../../repository/AirQualityDao";
 import { noDataFoundScript } from "../../scripts/Scripts";
-import Utility from "../../utility/Utility";
+import { copyObject } from "../../utility/Utility";
 import AirQualityService from "../AirQualityService";
 
 /**
@@ -68,7 +68,7 @@ export default class AirQualityServiceImpl implements AirQualityService {
       return Promise.reject(noDataFoundScript('airQuality'));
     }
     const airQualityRelayBo: AirQualityRelayBo = new AirQualityRelayBo();
-    Utility.copyObject(airQualityRelayBo, airQualityRelayDto)
+    copyObject(airQualityRelayBo, airQualityRelayDto)
     return airQualityRelayBo;
   }
 
