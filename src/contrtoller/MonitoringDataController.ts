@@ -61,7 +61,7 @@ export default class MonitoringDataController {
      * @param
      * @returns
      */
-    private async playDailyReport(): Promise<void> {
+    public async playDailyReport(): Promise<void> {
         let airQualityRelayBo: Entity;
         let weatherPredictRelayBo: Entity;
         let script: string;
@@ -131,7 +131,7 @@ export default class MonitoringDataController {
      * @param
      * @returns
      */
-    private async fetchMonitoringData(): Promise<void> {
+    public async fetchMonitoringData(): Promise<void> {
         return await this.weatherPredictService.saveMonitoringData();
     }
 
@@ -140,7 +140,7 @@ export default class MonitoringDataController {
       * @param
       * @returns
       */
-    private async deleteMonitoringData(): Promise<void> {
+    public async deleteMonitoringData(): Promise<void> {
         await this.weatherPredictService.deleteMonitoringData();
         await this.airQualityService.deleteMonitoringData();
     }
