@@ -77,8 +77,9 @@ export default class WeatherPredictServiceImpl implements WeatherPredictService 
     }
 
     /**
-     * 
-     * @param days 
+     * 產生 WeatherPredictDto
+     * @param days 天數
+     * @returns WeatherPredictDto
      */
     private generateWeatherPredictDto(days: number): WeatherPredictDto {
         const weatherPredictDto: WeatherPredictDto = new WeatherPredictDto();

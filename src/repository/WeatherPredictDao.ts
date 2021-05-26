@@ -26,7 +26,7 @@ export default class WeatherPredictDao {
     /**
      * 取得資料庫最新監測數據
      * @param
-     * @returns WeatherPredict 天氣預測實體
+     * @returns WeatherPredictRelayDto 天氣預測 Relay Dto
      */
     public async fetechLatestData(): Promise<WeatherPredictRelayDto> {
         const weatherPredictPo: WeatherPredict = (await WeatherPridictModel.findOne().sort({ '_id': 'desc' }).exec()).toObject({ getters: true });
@@ -38,8 +38,8 @@ export default class WeatherPredictDao {
 
     /**
      * 刪除區間內的資料
-     * @param startDate 資料區間起始日期
-     * @param endDate 資料區間結束日期
+     * @param WeatherPredictDto 天氣預測 Dto
+     * @returns
      */
     public async deleteDataByDuration(weatherPredictDto: WeatherPredictDto): Promise<void> {
         const rowNumber: number = await this.countDataAmount(weatherPredictDto);
@@ -55,8 +55,8 @@ export default class WeatherPredictDao {
 
     /**
     * 計算日期區間內資料數
-    * @param weatherPredictDto
-    * @returns 資料數
+    * @param WeatherPredictDto 天氣預測 Dto
+    * @returns 資料筆數
     */
     public async countDataAmount(weatherPredictDto: WeatherPredictDto): Promise<number> {
         const rowNumber: number = await WeatherPridictModel.countDocuments({

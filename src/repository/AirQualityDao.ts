@@ -25,7 +25,7 @@ export default class AirQualityDao {
   /**
    * 取得資料庫最新監測數據
    * @param
-   * @returns AirQuality 空氣品質實體
+   * @returns AirQualityRelayDto 空氣品質 Relay Dto
    */
   public async fetechLatestData(): Promise<AirQualityRelayDto> {
     const airQualityPo: AirQuality = (await AirQualityModel.findOne().sort({ '_id': 'desc' }).exec()).toObject({ getters: true });
@@ -37,8 +37,8 @@ export default class AirQualityDao {
 
   /**
    * 刪除區間內的資料
-   * @param startDate 資料區間起始日期
-   * @param endDate 資料區間結束日期
+   * @param AirQualityDto 空氣品質 Dto
+   * @returns
    */
   public async deleteDataByDuration(airQualityDto: AirQualityDto): Promise<void> {
     const rowNumber = await AirQualityModel.countDocuments({
