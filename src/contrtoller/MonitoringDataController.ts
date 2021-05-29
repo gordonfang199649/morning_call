@@ -11,10 +11,11 @@ import AirQualityServiceImpl from "../service/impl/AirQualityServiceImpl";
 import WeatherPredictServiceImpl from "../service/impl/WeatherPredictServiceImpl";
 import MonitoringService from "../service/MonitoringService";
 import fs from 'fs';
-import NoDataError from "../model/NoDataError";
 import { log } from "../utility/log/log";
 import Speaker from "speaker";
 import lame from 'lame';
+import WeatherPredictRelayDo from "../model/WeatherPredictRelayDo";
+import { copyObject } from "../utility/Utility";
 
 /**
  * MonitoringDataController 監測環境數據控制器
@@ -72,11 +73,8 @@ export default class MonitoringDataController {
             weatherPredictRelayBo = await this.weatherPredictService.fetchMonitoringData();
             script = this.generateScript(Array<Entity>(airQualityRelayBo, weatherPredictRelayBo));
         } catch (err) {
-            if (err instanceof NoDataError) {
-                script = err.message;
-            } else {
-                this.logger.error(err);
-            }
+            this.logger.error(err);
+            script = err.message;
         }
 
         if (script !== undefined) {
@@ -131,8 +129,11 @@ export default class MonitoringDataController {
      * @param
      * @returns
      */
-    public async fetchMonitoringData(): Promise<void> {
-        return await this.weatherPredictService.saveMonitoringData();
+    public async fetchMonitoringData(): Promise<WeatherPredictRelayDo> {
+        const weatherPredictRelayBo = await this.weatherPredictService.saveMonitoringData();
+        const weatherPredictRelayDo: WeatherPredictRelayDo = new WeatherPredictRelayDo();
+        copyObject(weatherPredictRelayDo, weatherPredictRelayBo);
+        return weatherPredictRelayDo;
     }
 
     /**

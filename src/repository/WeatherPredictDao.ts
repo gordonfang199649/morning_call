@@ -18,9 +18,12 @@ export default class WeatherPredictDao {
      * @param weatherPredictDoc 天氣預測 Document
      * @returns
      */
-    public async saveMonitoringData(weatherPredictDoc: WeatherPredictDoc): Promise<void> {
+    public async saveMonitoringData(weatherPredictDoc: WeatherPredictDoc): Promise<WeatherPredictRelayDto> {
         await weatherPredictDoc.save();
         this.logger.debug('inserted one row.');
+        const weatherPredictRelayDto: WeatherPredictRelayDto = new WeatherPredictRelayDto();
+        copyObject(weatherPredictRelayDto, weatherPredictDoc.toObject({ getters: true }));
+        return weatherPredictRelayDto;
     }
 
     /**

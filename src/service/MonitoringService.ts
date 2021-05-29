@@ -11,14 +11,14 @@ export default interface MonitoringService {
    * @param
    * @returns
    */
-  saveMonitoringData(): Promise<void>;
+  saveMonitoringData(): Promise<any>;
 
   /**
     * 從資料庫撈取政府機構Open API監測數據
     * @param
     * @returns
     */
-  fetchMonitoringData(): Promise<Entity>;
+  fetchMonitoringData(): Promise<any>;
 
   /**
    * 依資料產生的時間區間刪監測數據
@@ -27,4 +27,5 @@ export default interface MonitoringService {
    * @returns
    */
   deleteMonitoringData(): Promise<void>;
+  
 }

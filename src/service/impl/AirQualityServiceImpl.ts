@@ -9,6 +9,8 @@ import AirQualityDao from "../../repository/AirQualityDao";
 import { noDataFoundScript } from "../../utility/scripts/Scripts";
 import { copyObject } from "../../utility/Utility";
 import AirQualityService from "../AirQualityService";
+import { log } from "../../utility/log/log";
+import DataType from "../../enum/DataType";
 
 /**
  * AirQualityServiceImpl 空氣品質實作服務
@@ -18,7 +20,8 @@ import AirQualityService from "../AirQualityService";
 export default class AirQualityServiceImpl implements AirQualityService {
   /** AirQualityDao 空氣品質實體持久層 */
   private airQualityDao: AirQualityDao;
-
+  /** looger */
+  private logger = log(this.constructor.name);
   /**
    * 建構子-依賴注入
    * @param AirQualityDao 空氣品質實體持久層
@@ -30,11 +33,14 @@ export default class AirQualityServiceImpl implements AirQualityService {
   /**
    * @override
    */
-  public async saveMonitoringData(): Promise<void> {
+  public async saveMonitoringData(): Promise<AirQualityRelayBo> {
     const airQualityData: AirQuality = await getAirQualityData(0, 6);
     airQualityData.suggestion = this.getSuggestion(airQualityData.concentration);
     const airQualityDoc: AirQualityDoc = new AirQualityModel(airQualityData);
-    await this.airQualityDao.saveMonitoringData(airQualityDoc);
+    const airQualityRelayDto: AirQualityRelayDto = await this.airQualityDao.saveMonitoringData(airQualityDoc);
+    const airQualityRelayBo: AirQualityRelayBo = new AirQualityRelayBo();
+    copyObject(airQualityRelayBo, airQualityRelayDto)
+    return airQualityRelayBo;
   }
 
   /**
@@ -63,10 +69,14 @@ export default class AirQualityServiceImpl implements AirQualityService {
    * @override
    */
   public async fetchMonitoringData(): Promise<AirQualityRelayBo> {
-    const airQualityRelayDto: AirQualityRelayDto = await this.airQualityDao.fetechLatestData();
-    if (airQualityRelayDto === null) {
-      return Promise.reject(noDataFoundScript('airQuality'));
+    let airQualityRelayDto: AirQualityRelayDto;
+    try {
+      airQualityRelayDto = await this.airQualityDao.fetechLatestData();
+    } catch (error) {
+      this.logger.error(error);
+      return Promise.reject(noDataFoundScript(DataType.AIR_QUALITY));
     }
+
     const airQualityRelayBo: AirQualityRelayBo = new AirQualityRelayBo();
     copyObject(airQualityRelayBo, airQualityRelayDto)
     return airQualityRelayBo;

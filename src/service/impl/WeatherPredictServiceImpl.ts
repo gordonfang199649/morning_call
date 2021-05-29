@@ -3,12 +3,13 @@ import { getWeatherPredictData } from "../../utility/api/Api";
 import WeatherPridictModel, { WeatherPredict, WeatherPredictDoc } from "../../model/WeatherPridictModel";
 import WeatherPredictService from "../WeatherPredictService";
 import WeatherPredictDao from "../../repository/WeatherPredictDao";
-import NoDataError from "../../model/NoDataError";
 import { noDataFoundScript } from "../../utility/scripts/Scripts";
 import WeatherPredictDto from "../../model/WeatherPredictDto";
 import WeatherPredictRelayDto from "../../model/WeatherPredictRelayDto";
 import WeatherPredictRelayBo from "../../model/WeatherPredictRelayBo";
 import { copyObject } from "../../utility/Utility";
+import { log } from "../../utility/log/log";
+import DataType from "../../enum/DataType";
 
 /**
  * WeatherPredictServiceImpl 天氣預測實作服務
@@ -18,7 +19,8 @@ import { copyObject } from "../../utility/Utility";
 export default class WeatherPredictServiceImpl implements WeatherPredictService {
     /** WeatherPredictDao 天氣預報實體持久層 */
     private weatherPredictDao: WeatherPredictDao;
-
+    /** looger */
+    private logger = log(this.constructor.name);
     /**
      * 建構子-依賴注入
      * @param WeatherPredictDao 天氣預測實體持久層
@@ -30,11 +32,14 @@ export default class WeatherPredictServiceImpl implements WeatherPredictService 
     /**
      * @override
      */
-    public async saveMonitoringData(): Promise<any> {
+    public async saveMonitoringData(): Promise<WeatherPredictRelayBo> {
         const weatherPredict: WeatherPredict = await getWeatherPredictData(process.env.CWB_API_ID, process.env.LOCATION_NAME
             , this.formatDateTime(process.env.START_HOUR), this.formatDateTime(process.env.END_HOUR));
         const weatherPredictDoc: WeatherPredictDoc = new WeatherPridictModel(weatherPredict);
-        await this.weatherPredictDao.saveMonitoringData(weatherPredictDoc);
+        const weatherPredictRelayDto: WeatherPredictRelayDto = await this.weatherPredictDao.saveMonitoringData(weatherPredictDoc);
+        const weatherPredictRelayBo: WeatherPredictRelayBo = new WeatherPredictRelayBo();
+        copyObject(weatherPredictRelayBo, weatherPredictRelayDto);
+        return weatherPredictRelayBo;
     }
 
     /**
@@ -60,7 +65,7 @@ export default class WeatherPredictServiceImpl implements WeatherPredictService 
         const weatherPredictDto: WeatherPredictDto = this.generateWeatherPredictDto(-1);
         const dataAmount: number = await this.weatherPredictDao.countDataAmount(weatherPredictDto);
         if (dataAmount === 0) {
-            return Promise.reject(new NoDataError(noDataFoundScript('weatherPredict')));
+            return Promise.reject(noDataFoundScript(DataType.WEATHER_PREDICT));
         }
         const weatherPredictRelayDto: WeatherPredictRelayDto = await this.weatherPredictDao.fetechLatestData();
         const weatherPredictRelayBo: WeatherPredictRelayBo = new WeatherPredictRelayBo();
@@ -75,6 +80,7 @@ export default class WeatherPredictServiceImpl implements WeatherPredictService 
         const weatherPredictDto: WeatherPredictDto = this.generateWeatherPredictDto(Number.parseInt(process.env.RESERVE_DAYS));
         await this.weatherPredictDao.deleteDataByDuration(weatherPredictDto);
     }
+
 
     /**
      * 產生 WeatherPredictDto
