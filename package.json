@@ -6,7 +6,7 @@
     "play": "NODE_ENV=dev ts-node ./src/main.ts playDailyReport",
     "fetch": "NODE_ENV=dev  ts-node ./src/main.ts fetchMonitoringData",
     "delete": "NODE_ENV=dev ts-node ./src/main.ts deleteMonitoringData",
-    "test": "NODE_ENV=dev jest"
+    "test": "NODE_ENV=dev jest --coverage"
   },
   "dependencies": {
     "dayjs": "^1.10.4",
