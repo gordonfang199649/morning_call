@@ -45,7 +45,7 @@ export default class MonitoringDataController {
      * @param args 參數
      * @returns
      */
-    public async dispatch(args: Array<string>): Promise<void> {
+    public async dispatch(args: Array<string>): Promise<any> {
         const controllerProxy = new Proxy(this, {
             get: (target: MonitoringDataController, prop: string): boolean => {
                 this.logger.debug(`now calling ${prop}`);
@@ -53,7 +53,7 @@ export default class MonitoringDataController {
             }
         });
         if (args[2] !== undefined && args[2] in controllerProxy) {
-            await controllerProxy[args[2]]();
+            return await controllerProxy[args[2]]();
         }
     }
 

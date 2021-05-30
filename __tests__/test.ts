@@ -15,6 +15,9 @@ import MonitoringDataController from '../src/contrtoller/MonitoringDataControlle
 import AirQualityDto from '../src/model/AirQualityDto';
 import WeatherPredictDto from '../src/model/WeatherPredictDto';
 import WeatherPredictRelayDo from '../src/model/WeatherPredictRelayDo';
+import * as Api from '../src/utility/api/Api';
+import { AirQuality } from '../src/model/AirQualityModel';
+import AirQualityIndex from '../src/enum/AirQualityIndex';
 
 dotenv.config({ path: path.resolve(`./${process.env.NODE_ENV}.env`) });
 
@@ -47,6 +50,36 @@ describe("應用程式單元測試", () => {
         expect(saveRelayBo).toEqual(fetchRelayBo);
     });
 
+    test("預期依據PM2.5濃度產生對應建議", async () => {
+        const testCase: AirQuality = <AirQuality>{
+            type: DataType.AIR_QUALITY,
+            siteId: 57,
+            county: '高雄市',
+            siteName: '前鎮',
+            monitorDate: Date(),
+            itemName: '細懸浮微粒',
+            itemEngName: 'PM2.5',
+            concentration: 0,
+            suggestion: '',
+        };
+
+        const spyGetAirQualityData = jest.spyOn(Api, 'getAirQualityData')
+        const concentration = [1, 51, 101, 151, 201, 301];
+        const airIndex = [AirQualityIndex.GOOD,
+        AirQualityIndex.MODERATE,
+        AirQualityIndex.SENSITIVE,
+        AirQualityIndex.UNHEALTHY,
+        AirQualityIndex.VERY_UNHEALTHY,
+        AirQualityIndex.HAZARDOUS];
+
+        for (let i = 0; i < concentration.length; i++) {
+            testCase.concentration = concentration[i];
+            spyGetAirQualityData.mockReturnValue(Promise.resolve(testCase));
+            const saveRelayBo: AirQualityRelayBo = await airQualityService.saveMonitoringData();
+            expect(saveRelayBo.suggestion).toBe(airIndex[i]);
+        }
+    });
+
     test("預期資料庫無空氣品質資料時拋錯", async () => {
         await airQualityService.deleteMonitoringData();
         await expect(airQualityService.fetchMonitoringData()).rejects
@@ -62,17 +95,17 @@ describe("應用程式單元測試", () => {
 
 describe("應用程式整合測試", () => {
     test("預期天氣監測資料是否有正確地儲存到資料庫", async () => {
-        const weatherPredictRelayDo: WeatherPredictRelayDo = await controller.fetchMonitoringData();
+        const weatherPredictRelayDo: WeatherPredictRelayDo = await controller.dispatch(['', '', 'fetchMonitoringData']);;
         const weatherPredictRelayBo: WeatherPredictRelayBo = await weatherPredictService.fetchMonitoringData();
         expect(weatherPredictRelayDo).toEqual(weatherPredictRelayBo);
     });
 
     test("預期播放音檔", async () => {
-         expect(await controller.playDailyReport());
+        expect(await controller.dispatch(['', '', 'playDailyReport']));
     });
 
     test("預期保留天數內的資料會全部刪除", async () => {
-        await controller.deleteMonitoringData();
+        await controller.dispatch(['', '', 'deleteMonitoringData']);
         const startDate: Date = dayjs().add(Number.parseInt(process.env.RESERVE_DAYS), 'd').toDate();
         const endDate: Date = dayjs().toDate();
 
@@ -86,5 +119,9 @@ describe("應用程式整合測試", () => {
 
         expect(await airQualityDao.countDataAmount(airQualityDto)).toBe(0);
         expect(await weatherPredictDao.countDataAmount(weatherPredictDto)).toBe(0);
+    });
+
+    test("預期刪檔後播放音檔時拋錯", async () => {
+        expect(await controller.dispatch(['', '', 'playDailyReport']));
     });
 });

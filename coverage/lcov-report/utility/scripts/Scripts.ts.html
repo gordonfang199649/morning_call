@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88.24% </span>
+                <span class="strong">58.82% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>15/17</span>
+                <span class='fraction'>10/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80% </span>
+                <span class="strong">20% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>8/10</span>
+                <span class='fraction'>2/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">66.67% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/3</span>
+                <span class='fraction'>2/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">84.62% </span>
+                <span class="strong">46.15% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>11/13</span>
+                <span class='fraction'>6/13</span>
             </div>
         
             
@@ -55,7 +55,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -108,16 +108,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -126,16 +135,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span></td><td class="text"><pre class="prettyprint lang-js">import dayjs from "dayjs";
+<span class="cline-any cline-yes">5x</span></td><td class="text"><pre class="prettyprint lang-js">import dayjs from "dayjs";
 import DataType from "../../enum/DataType";
 import { AirQuality } from "../../model/AirQualityModel";
 import { WeatherPredict } from "../../model/WeatherPridictModel";
@@ -145,19 +145,19 @@ import { WeatherPredict } from "../../model/WeatherPridictModel";
  * @param airQuality 空氣品質實體
  * @returns 播報腳本
  */
-export const airQualityReportScript = (airQuality: AirQuality): string =&gt; {
+export const airQualityReportScript = <span class="fstat-no" title="function not covered" >(a</span>irQuality: AirQuality): string =&gt; {
     let greeting: string;
-    const hour: number = dayjs().hour();
+    const hour: number = <span class="cstat-no" title="statement not covered" >dayjs().hour();</span>
 &nbsp;
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (hour &gt; 2 &amp;&amp; hour &lt; 12) {
+<span class="cstat-no" title="statement not covered" >    if (hour &gt; 2 &amp;&amp; hour &lt; 12) {</span>
 <span class="cstat-no" title="statement not covered" >        greeting = '早安';</span>
-    } else <span class="missing-if-branch" title="else path not taken" >E</span>if (hour &gt; 11 &amp;&amp; hour &lt; 19) {
-        greeting = '午安';
+    } else <span class="cstat-no" title="statement not covered" >if (hour &gt; 11 &amp;&amp; hour &lt; 19) {</span>
+<span class="cstat-no" title="statement not covered" >        greeting = '午安';</span>
     } else {
 <span class="cstat-no" title="statement not covered" >        greeting = '晚安';</span>
     }
 &nbsp;
-    return `${process.env.OWNER}${greeting}，在${airQuality.county}${airQuality.siteName}區空氣監測站點，監測時間${airQuality.monitorDate}，${airQuality.itemName}濃度為${airQuality.concentration}，${airQuality.suggestion}`;
+<span class="cstat-no" title="statement not covered" >    return `${process.env.OWNER}${greeting}，在${airQuality.county}${airQuality.siteName}區空氣監測站點，監測時間${airQuality.monitorDate}，${airQuality.itemName}濃度為${airQuality.concentration}，${airQuality.suggestion}`;</span>
 }
 &nbsp;
 /**
@@ -181,7 +181,7 @@ export const errorScript = (type: string) =&gt; `很抱歉，應用程式發生�
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sun May 30 2021 14:45:46 GMT+0800 (Taipei Standard Time)
+                at Sun May 30 2021 17:15:08 GMT+0800 (Taipei Standard Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
