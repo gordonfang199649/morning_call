@@ -6,7 +6,7 @@ import AirQualityModel, { AirQuality, AirQualityDoc } from "../../model/AirQuali
 import AirQualityRelayBo from "../../model/AirQualityRelayBo";
 import AirQualityRelayDto from "../../model/AirQualityRelayDto";
 import AirQualityDao from "../../repository/AirQualityDao";
-import { noDataFoundScript } from "../../utility/scripts/Scripts";
+import { errorScript } from "../../utility/scripts/Scripts";
 import { copyObject } from "../../utility/Utility";
 import AirQualityService from "../AirQualityService";
 import { log } from "../../utility/log/log";
@@ -74,7 +74,7 @@ export default class AirQualityServiceImpl implements AirQualityService {
       airQualityRelayDto = await this.airQualityDao.fetechLatestData();
     } catch (error) {
       this.logger.error(error);
-      return Promise.reject(noDataFoundScript(DataType.AIR_QUALITY));
+      return Promise.reject(errorScript(DataType.AIR_QUALITY));
     }
 
     const airQualityRelayBo: AirQualityRelayBo = new AirQualityRelayBo();

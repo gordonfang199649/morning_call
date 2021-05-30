@@ -3,7 +3,7 @@ import { getWeatherPredictData } from "../../utility/api/Api";
 import WeatherPridictModel, { WeatherPredict, WeatherPredictDoc } from "../../model/WeatherPridictModel";
 import WeatherPredictService from "../WeatherPredictService";
 import WeatherPredictDao from "../../repository/WeatherPredictDao";
-import { noDataFoundScript } from "../../utility/scripts/Scripts";
+import { errorScript } from "../../utility/scripts/Scripts";
 import WeatherPredictDto from "../../model/WeatherPredictDto";
 import WeatherPredictRelayDto from "../../model/WeatherPredictRelayDto";
 import WeatherPredictRelayBo from "../../model/WeatherPredictRelayBo";
@@ -65,7 +65,7 @@ export default class WeatherPredictServiceImpl implements WeatherPredictService 
         const weatherPredictDto: WeatherPredictDto = this.generateWeatherPredictDto(-1);
         const dataAmount: number = await this.weatherPredictDao.countDataAmount(weatherPredictDto);
         if (dataAmount === 0) {
-            return Promise.reject(noDataFoundScript(DataType.WEATHER_PREDICT));
+            return Promise.reject(errorScript(DataType.WEATHER_PREDICT));
         }
         const weatherPredictRelayDto: WeatherPredictRelayDto = await this.weatherPredictDao.fetechLatestData();
         const weatherPredictRelayBo: WeatherPredictRelayBo = new WeatherPredictRelayBo();
