@@ -5,6 +5,10 @@
 #node modules
 /node_modules
 #log
-src/log/log.txt
+src/utility/log/log.txt
 #mp3 file
 src/contrtoller/morning_call.mp3
+#package-lock.json
+./package-lock.json
+#coverage
+/coverage

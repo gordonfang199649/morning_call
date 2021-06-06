@@ -12,10 +12,9 @@ import WeatherPredictServiceImpl from "../service/impl/WeatherPredictServiceImpl
 import MonitoringService from "../service/MonitoringService";
 import fs from 'fs';
 import { log } from "../utility/log/log";
-import Speaker from "speaker";
-import lame from 'lame';
 import WeatherPredictRelayDo from "../model/WeatherPredictRelayDo";
 import { copyObject } from "../utility/Utility";
+import { execSync, exec } from "child_process";
 
 /**
  * MonitoringDataController 監測環境數據控制器
@@ -74,13 +73,15 @@ export default class MonitoringDataController {
             script = this.generateScript(Array<Entity>(airQualityRelayBo, weatherPredictRelayBo));
         } catch (err) {
             this.logger.error(err);
-            script = err.message;
+            if (err.constructor !== Error) {
+                script = err;
+            }
         }
 
         if (script !== undefined) {
             const fileName: string = `${__dirname}/morning_call.mp3`;
             await this.generateAudioFile(script, fileName);
-            this.outputAudioToSpeaker(fileName);
+            this.executeCommands(fileName);
         }
     }
 
@@ -109,19 +110,24 @@ export default class MonitoringDataController {
         const rawAudio: Array<AudioText> = await getAllAudioBase64(script, { lang: 'zh-TW' });
         const base64Audio: string = rawAudio.map((raw) => { return raw.base64 }).join();
         const audioBuffer = Buffer.from(base64Audio, 'base64');
-        fs.createWriteStream(fileName).write(audioBuffer, "base64");
+        fs.writeFileSync(fileName, audioBuffer);
         this.logger.info(`generated audio file: ${fileName}`);
     }
 
     /**
-     * 執行播放語音檔
+     * 執行播放語音檔與刪檔命令
      * @param fileName 檔案名
      * @returns
      */
-    private outputAudioToSpeaker(fileName: string): void {
-        fs.createReadStream(fileName)
-            .pipe(new lame.Decoder())
-            .pipe(new Speaker());
+    private executeCommands(fileName: string): void {
+        execSync(`mpg123 --quiet ${fileName}`);
+        this.logger.debug(`finised playing file ${fileName}`);
+        exec(`rm ${fileName}`, (err, stdout, stderr) => {
+            if (err) this.logger.error(err);
+            if (stderr) this.logger.error(stderr);
+            console.log(`deleted file ${fileName}`);
+            this.logger.debug(`deleted file ${fileName}`);
+        });
     }
 
     /**

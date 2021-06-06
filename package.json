@@ -3,19 +3,17 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "play": "NODE_ENV=dev ts-node ./src/main.ts playDailyReport",
-    "fetch": "NODE_ENV=dev  ts-node ./src/main.ts fetchMonitoringData",
-    "delete": "NODE_ENV=dev ts-node ./src/main.ts deleteMonitoringData",
+    "play": "NODE_ENV=production ts-node ./src/main.ts playDailyReport",
+    "fetch": "NODE_ENV=production  ts-node ./src/main.ts fetchMonitoringData",
+    "delete": "NODE_ENV=production ts-node ./src/main.ts deleteMonitoringData",
     "test": "NODE_ENV=dev jest --coverage"
   },
   "dependencies": {
     "dayjs": "^1.10.4",
     "dotenv": "^8.2.0",
     "google-tts-api": "^2.0.2",
-    "lame": "^1.2.4",
     "log4js": "^6.3.0",
     "mongoose": "^5.12.7",
-    "speaker": "^0.5.3",
     "text-to-speech-js": "^1.1.10",
     "ts-node": "^10.0.0"
   },
