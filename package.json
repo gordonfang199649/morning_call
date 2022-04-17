@@ -1,11 +1,12 @@
 {
   "name": "morningcall",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
-    "play": "NODE_ENV=production ts-node ./src/main.ts playDailyReport",
-    "fetch": "NODE_ENV=production  ts-node ./src/main.ts fetchMonitoringData",
-    "delete": "NODE_ENV=production ts-node ./src/main.ts deleteMonitoringData",
+    "FetchWeatherPredictDataJob": "NODE_ENV=production ts-node ./src/job/FetchWeatherPredictDataJob.ts",
+    "FetchAirQualityDataJob": "NODE_ENV=production ts-node ./src/job/FetchAirQualityDataJob.ts",
+    "PlayMonitoringReportJob": "NODE_ENV=production ts-node ./src/job/PlayMonitoringReportJob.ts",
+    "DeleteMonitoringDataJob": "NODE_ENV=production ts-node ./src/job/DeleteMonitoringDataJob.ts",
     "test": "NODE_ENV=dev jest --coverage"
   },
   "dependencies": {

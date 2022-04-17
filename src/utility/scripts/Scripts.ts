@@ -37,4 +37,4 @@ export const weatherPredictReportScript = (weatherPredict: WeatherPredict): stri
  * @param type 監測數據類別
  * @returns 語音腳本
  */
-export const errorScript = (type: string) => `很抱歉，應用程式發生異常，或資料庫目前尚無${type == DataType.AIR_QUALITY ? '空氣' : '天氣預測'}監測數據，請重新撈取資料，謝謝您。`;
+export const errorScript = () => `很抱歉，應用程式發生異常，或資料庫目前尚無監測數據，請檢查過後重新撈取資料，謝謝您。`;

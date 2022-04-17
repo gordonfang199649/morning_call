@@ -1,8 +1,5 @@
 import { log } from "../utility/log/log";
-import AirQualityDto from "../model/AirQualityDto";
 import AirQualityModel, { AirQuality, AirQualityDoc } from "../model/AirQualityModel";
-import AirQualityRelayDto from "../model/AirQualityRelayDto";
-import { copyObject } from "../utility/Utility";
 
 /**
  * AirQualityDao 空氣品質實體持久層
@@ -14,15 +11,11 @@ export default class AirQualityDao {
   private logger = log(this.constructor.name);
   /**
    * 監測數據儲存至資料庫
-   * @param airQualitydoc 空氣品質 Document
-   * @returns
+   * @param airQualityDoc 空氣品質 Document
    */
-  public async saveMonitoringData(airQualityDoc: AirQualityDoc): Promise<AirQualityRelayDto> {
+  public async saveMonitoringData(airQualityDoc: AirQualityDoc): Promise<void> {
     await airQualityDoc.save();
-    this.logger.debug('inserted one row.');
-    const airQualityRelayDto: AirQualityRelayDto = new AirQualityRelayDto();
-    copyObject(airQualityRelayDto, airQualityDoc.toObject({ getters: true }));
-    return airQualityRelayDto;
+    this.logger.info('inserted one row.');
   }
 
   /**
@@ -30,12 +23,10 @@ export default class AirQualityDao {
    * @param
    * @returns AirQualityRelayDto 空氣品質 Relay Dto
    */
-  public async fetechLatestData(): Promise<AirQualityRelayDto> {
+  public async fetechLatestData(): Promise<AirQuality> {
     const airQualityPo: AirQuality = (await AirQualityModel.findOne().sort({ '_id': 'desc' }).exec()).toObject({ getters: true });
-    this.logger.debug('selected one row.', airQualityPo);
-    const airQualityRelayDto: AirQualityRelayDto = new AirQualityRelayDto();
-    copyObject(airQualityRelayDto, airQualityPo);
-    return airQualityRelayDto;
+    this.logger.info('selected one row.', airQualityPo);
+    return airQualityPo;
   }
 
   /**
@@ -43,17 +34,17 @@ export default class AirQualityDao {
    * @param AirQualityDto 空氣品質 Dto
    * @returns
    */
-  public async deleteDataByDuration(airQualityDto: AirQualityDto): Promise<void> {
-    const rowNumber = await this.countDataAmount(airQualityDto);
+  public async deleteDataByDuration(startDate: Date, endDate: Date): Promise<void> {
+    const rowNumber = await this.countDataAmount(startDate, endDate);
 
     await AirQualityModel.deleteMany({
       createDate: {
-        $gte: airQualityDto.startDate,
-        $lte: airQualityDto.endDate
+        $gte: startDate,
+        $lte: endDate
       }
     }).exec();
 
-    this.logger.debug(`deleted ${rowNumber} row(s).`);
+    this.logger.info(`deleted ${rowNumber} row(s).`);
   }
 
   /**
@@ -61,11 +52,11 @@ export default class AirQualityDao {
    * @param AirQualityDto 空氣品質 Dto
    * @returns 資料筆數
    */
-  public async countDataAmount(airQualityDto: AirQualityDto): Promise<number> {
+  public async countDataAmount(startDate: Date, endDate: Date): Promise<number> {
     const rowNumber: number = await AirQualityModel.countDocuments({
       createDate: {
-        $gte: airQualityDto.startDate,
-        $lte: airQualityDto.endDate
+        $gte: startDate,
+        $lte: endDate
       }
     }).exec();
     return rowNumber;

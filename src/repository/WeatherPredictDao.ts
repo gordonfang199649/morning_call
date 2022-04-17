@@ -1,8 +1,5 @@
 import { log } from "../utility/log/log";
-import WeatherPredictDto from "../model/WeatherPredictDto";
-import WeatherPredictRelayDto from "../model/WeatherPredictRelayDto";
 import WeatherPridictModel, { WeatherPredict, WeatherPredictDoc } from "../model/WeatherPridictModel";
-import { copyObject } from "../utility/Utility";
 
 /**
  * WeatherPredictDao
@@ -16,14 +13,10 @@ export default class WeatherPredictDao {
     /**
      * 監測數據儲存至資料庫
      * @param weatherPredictDoc 天氣預測 Document
-     * @returns
      */
-    public async saveMonitoringData(weatherPredictDoc: WeatherPredictDoc): Promise<WeatherPredictRelayDto> {
+    public async saveMonitoringData(weatherPredictDoc: WeatherPredictDoc): Promise<void> {
         await weatherPredictDoc.save();
-        this.logger.debug('inserted one row.');
-        const weatherPredictRelayDto: WeatherPredictRelayDto = new WeatherPredictRelayDto();
-        copyObject(weatherPredictRelayDto, weatherPredictDoc.toObject({ getters: true }));
-        return weatherPredictRelayDto;
+        this.logger.info('inserted one row.');
     }
 
     /**
@@ -31,12 +24,10 @@ export default class WeatherPredictDao {
      * @param
      * @returns WeatherPredictRelayDto 天氣預測 Relay Dto
      */
-    public async fetechLatestData(): Promise<WeatherPredictRelayDto> {
+    public async fetechLatestData(): Promise<WeatherPredict> {
         const weatherPredictPo: WeatherPredict = (await WeatherPridictModel.findOne().sort({ '_id': 'desc' }).exec()).toObject({ getters: true });
-        this.logger.debug('selected one row.', weatherPredictPo);
-        const weatherPredictRelayDto: WeatherPredictRelayDto = new WeatherPredictRelayDto();
-        copyObject(weatherPredictRelayDto, weatherPredictPo);
-        return weatherPredictRelayDto;
+        this.logger.info('selected one row.', weatherPredictPo);
+        return weatherPredictPo;
     }
 
     /**
@@ -44,16 +35,16 @@ export default class WeatherPredictDao {
      * @param WeatherPredictDto 天氣預測 Dto
      * @returns
      */
-    public async deleteDataByDuration(weatherPredictDto: WeatherPredictDto): Promise<void> {
-        const rowNumber: number = await this.countDataAmount(weatherPredictDto);
+    public async deleteDataByDuration(startDate: Date, endDate: Date): Promise<void> {
+        const rowNumber: number = await this.countDataAmount(startDate, endDate);
         await WeatherPridictModel.deleteMany({
             createDate: {
-                $gte: weatherPredictDto.startDate,
-                $lte: weatherPredictDto.endDate
+                $gte: startDate,
+                $lte: endDate
             }
         }).exec();
 
-        this.logger.debug(`deleted ${rowNumber} row(s).`);
+        this.logger.info(`deleted ${rowNumber} row(s).`);
     }
 
     /**
@@ -61,11 +52,11 @@ export default class WeatherPredictDao {
     * @param WeatherPredictDto 天氣預測 Dto
     * @returns 資料筆數
     */
-    public async countDataAmount(weatherPredictDto: WeatherPredictDto): Promise<number> {
+    public async countDataAmount(startDate: Date, endDate: Date): Promise<number> {
         const rowNumber: number = await WeatherPridictModel.countDocuments({
             createDate: {
-                $gte: weatherPredictDto.startDate,
-                $lte: weatherPredictDto.endDate
+                $gte: startDate,
+                $lte: endDate
             }
         }).exec();
         return rowNumber;
