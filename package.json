@@ -6,8 +6,7 @@
     "FetchWeatherPredictDataJob": "NODE_ENV=production ts-node ./src/job/FetchWeatherPredictDataJob.ts",
     "FetchAirQualityDataJob": "NODE_ENV=production ts-node ./src/job/FetchAirQualityDataJob.ts",
     "PlayMonitoringReportJob": "NODE_ENV=production ts-node ./src/job/PlayMonitoringReportJob.ts",
-    "DeleteMonitoringDataJob": "NODE_ENV=production ts-node ./src/job/DeleteMonitoringDataJob.ts",
-    "test": "NODE_ENV=dev jest --coverage"
+    "DeleteMonitoringDataJob": "NODE_ENV=production ts-node ./src/job/DeleteMonitoringDataJob.ts"
   },
   "dependencies": {
     "dayjs": "^1.10.4",
@@ -19,10 +18,7 @@
     "ts-node": "^10.0.0"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.23",
     "@types/node": "^15.6.0",
-    "jest": "^27.0.1",
-    "ts-jest": "^27.0.1",
     "tslint": "^6.1.3",
     "typescript": "^4.2.4"
   }
