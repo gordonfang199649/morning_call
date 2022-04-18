@@ -10,8 +10,9 @@ export const connection = async () => {
     });
     logger.info('successfully connected with mongodb.');
   } catch (error) {
-    await disconnect();
+    // 連線 Mongodb 叢集失敗，記錄下 log 後拋錯
     logger.error('disconnected with mongodb.', error);
+    throw error;
   }
 };
 
