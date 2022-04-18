@@ -26,10 +26,10 @@ dotenv.config({ path: path.resolve(`./${process.env.NODE_ENV}.env`) });
     try {
         airQualityData = await getAirQualityData(0, 6);
         airQualityData.suggestion = getSuggestion(airQualityData.concentration);
-    } catch (e) {
+    } catch (error) {
         // 呼叫 API 過程中有發生錯誤，就不進資料庫 
-        logger.error(e);
-        throw e;
+        logger.error(error);
+        throw error;
     }
 
     // 將蒐集資料儲存到 mongodb 叢集

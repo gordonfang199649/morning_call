@@ -26,10 +26,10 @@ dotenv.config({ path: path.resolve(`./${process.env.NODE_ENV}.env`) });
     try {
         weatherPredict = await getWeatherPredictData(process.env.CWB_API_ID, process.env.LOCATION_NAME
             , formatDateTime(process.env.START_HOUR), formatDateTime(process.env.END_HOUR));
-    } catch (e) {
+    } catch (error) {
         // 呼叫 API 過程中有發生錯誤，就不進資料庫 
-        logger.error(e);
-        throw e;
+        logger.error(error);
+        throw error;
     }
 
     // 將蒐集資料儲存到 mongodb 叢集

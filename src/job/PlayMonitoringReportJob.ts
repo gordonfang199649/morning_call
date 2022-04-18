@@ -32,8 +32,8 @@ const logger = log("PlayMonitoringReportJob");
         const airQualityPo: AirQuality = await airQualityDao.fetechLatestData();
         const weatherPredictPo: WeatherPredict = await weatherPredictDao.fetechLatestData();
         script = generateScript(Array<Entity>(airQualityPo, weatherPredictPo));
-    } catch (e) {
-        logger.error(e);
+    } catch (error) {
+        logger.error(error);
         // 若撈取資料異常時，播放警示訊息給要聽預報的人
         script = errorScript;
     }

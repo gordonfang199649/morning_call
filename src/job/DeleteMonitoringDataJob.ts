@@ -25,6 +25,7 @@ dotenv.config({ path: path.resolve(`./${process.env.NODE_ENV}.env`) });
     const endDate: Date = dayjs().toDate();
     await weatherPredictDao.deleteDataByDuration(startDate, endDate);
     await airQualityDao.deleteDataByDuration(startDate, endDate)
+    
     await disconnection();
     logger.info('DeleteMonitoringDataJob terminated.');
 })();
