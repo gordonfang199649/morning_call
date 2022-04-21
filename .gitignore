@@ -14,3 +14,5 @@ src/contrtoller/morning_call.mp3
 /coverage
 #logs
 src//utility/log
+#DS_Store
+.DS_Store
